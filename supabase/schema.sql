@@ -1,13 +1,16 @@
+-- Streamlined Internal Gym Management System Schema
 -- Streamlined Gym Management System & Member Fitness Portal Schema
 -- Run this script in your Supabase SQL Editor to configure tables, indexes, and RLS policies.
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- 1. PROFILES (Admin Users)
 -- 1. PROFILES (Admin & Member users)
 CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name TEXT NOT NULL,
   email TEXT NOT NULL UNIQUE,
+  role TEXT NOT NULL DEFAULT 'admin',
   role TEXT NOT NULL DEFAULT 'admin', -- 'admin' or 'member'
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -60,6 +63,7 @@ CREATE TABLE IF NOT EXISTS public.payments (
   payment_date DATE NOT NULL DEFAULT CURRENT_DATE,
   start_date DATE NOT NULL,
   expiry_date DATE NOT NULL,
+  payment_method TEXT NOT NULL DEFAULT 'Cash', -- Cash, UPI, Card, Bank Transfer, Other
   payment_method TEXT NOT NULL DEFAULT 'Cash',
   notes TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -121,10 +125,12 @@ CREATE TABLE IF NOT EXISTS public.workout_logs (
 CREATE INDEX IF NOT EXISTS idx_payments_member_id ON public.payments(member_id);
 CREATE INDEX IF NOT EXISTS idx_payments_expiry_date ON public.payments(expiry_date);
 CREATE INDEX IF NOT EXISTS idx_members_phone ON public.members(phone);
+CREATE INDEX IF NOT EXISTS idx_members_is_active ON public.members(is_active);
 CREATE INDEX IF NOT EXISTS idx_members_user_id ON public.members(user_id);
 CREATE INDEX IF NOT EXISTS idx_workouts_member_id ON public.workouts(member_id);
 CREATE INDEX IF NOT EXISTS idx_workout_logs_member_id ON public.workout_logs(member_id);
 
+-- ROW LEVEL SECURITY (RLS) POLICIES
 -- RLS POLICIES
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.gym_settings ENABLE ROW LEVEL SECURITY;
@@ -136,6 +142,7 @@ ALTER TABLE public.workouts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.workout_exercises ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.workout_logs ENABLE ROW LEVEL SECURITY;
 
+CREATE POLICY "Admins full access profiles" ON public.profiles FOR ALL USING (auth.uid() = id);
 -- Admins full access
 CREATE POLICY "Admins full access profiles" ON public.profiles FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admins full access gym_settings" ON public.gym_settings FOR ALL USING (auth.role() = 'authenticated');
@@ -147,6 +154,30 @@ CREATE POLICY "Admins full access workouts" ON public.workouts FOR ALL USING (au
 CREATE POLICY "Admins full access workout_exercises" ON public.workout_exercises FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admins full access workout_logs" ON public.workout_logs FOR ALL USING (auth.role() = 'authenticated');
 
+-- INITIAL SEED DATA FOR GYM SETTINGS & PLANS IF EMPTY
+INSERT INTO public.gym_settings (gym_name, phone, whatsapp_number, warning_days)
+SELECT 'SHIVA GYM', '9600879081', '919600879081', 7
+WHERE NOT EXISTS (SELECT 1 FROM public.gym_settings);
+
+INSERT INTO public.membership_plans (name, duration_days, price, is_active)
+SELECT '1 Month', 30, 700.00, true
+WHERE NOT EXISTS (SELECT 1 FROM public.membership_plans WHERE name = '1 Month');
+
+INSERT INTO public.membership_plans (name, duration_days, price, is_active)
+SELECT '2 Months', 60, 1200.00, true
+WHERE NOT EXISTS (SELECT 1 FROM public.membership_plans WHERE name = '2 Months');
+
+INSERT INTO public.membership_plans (name, duration_days, price, is_active)
+SELECT '4 Months', 120, 2000.00, true
+WHERE NOT EXISTS (SELECT 1 FROM public.membership_plans WHERE name = '4 Months');
+
+INSERT INTO public.membership_plans (name, duration_days, price, is_active)
+SELECT '6 Months', 180, 2700.00, true
+WHERE NOT EXISTS (SELECT 1 FROM public.membership_plans WHERE name = '6 Months');
+
+INSERT INTO public.membership_plans (name, duration_days, price, is_active)
+SELECT '15 Months', 450, 5500.00, true
+WHERE NOT EXISTS (SELECT 1 FROM public.membership_plans WHERE name = '15 Months');
 -- Member read-only/own data policies
 CREATE POLICY "Members view active plans" ON public.membership_plans FOR SELECT USING (is_active = true);
 CREATE POLICY "Members view gym settings" ON public.gym_settings FOR SELECT USING (true);

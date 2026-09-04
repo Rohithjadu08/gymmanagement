@@ -97,19 +97,24 @@ export default function MemberDashboardPage() {
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-2xl font-bold shadow-inner">
-              {member?.full_name?.charAt(0) || 'M'}
+            <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-2xl font-bold shadow-inner overflow-hidden shrink-0">
+              {member?.photo_url ? (
+                <img src={member.photo_url} alt={member.full_name} className="h-full w-full object-cover" />
+              ) : (
+                member?.full_name?.charAt(0) || 'M'
+              )}
             </div>
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-                  Welcome back, {member?.full_name || 'Member'}!
+                  SHIVA GYM <span className="text-amber-400 text-xs font-bold uppercase tracking-wider ml-1">SHAPE YOUR BODY</span>
                 </h1>
               </div>
-              <p className="text-sm text-zinc-400 mt-1 flex items-center gap-2">
-                <span>ID: {member?.member_code}</span>
-                <span>•</span>
-                <span>Member since {member?.joining_date}</span>
+              <p className="text-sm font-semibold text-zinc-300 mt-1">
+                Athlete: {member?.full_name || 'Member'} • ID: {member?.member_code}
+              </p>
+              <p className="text-xs text-zinc-400 mt-0.5">
+                Member since {member?.joining_date}
               </p>
             </div>
           </div>
@@ -124,6 +129,37 @@ export default function MemberDashboardPage() {
               Explore 3D Muscle Map
             </Link>
           </div>
+        </div>
+      </div>
+
+      {/* Official Shiva Gym Services & Contact Card */}
+      <div className="rounded-xl border border-amber-500/30 bg-zinc-900/90 p-5 shadow-lg space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-800 pb-3">
+          <div>
+            <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <Dumbbell className="w-4 h-4 text-amber-400" />
+              Official SHIVA GYM Services
+            </h2>
+            <p className="text-xs text-zinc-400">Available facilities and training programs</p>
+          </div>
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-zinc-400">Gym Contact:</span>
+            <a
+              href="https://wa.me/919600879081?text=Hi%20Shiva%20Gym%20(Balaji),%20I%20have%20a%20query."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-amber-400 font-bold hover:underline bg-amber-950/60 px-2.5 py-1 rounded border border-amber-500/30"
+            >
+              BALAJI (9600879081)
+            </a>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs text-center font-medium">
+          <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-200">💪 Gym Training</div>
+          <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-200">🏋️ Personal Training</div>
+          <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-200">🏆 Body Building</div>
+          <div className="p-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-200">⚙️ State-of-Art Equipment</div>
+          <div className="p-2.5 rounded-lg bg-amber-950/40 border border-amber-500/40 text-amber-300 font-bold">🏃 Treadmill (₹300)</div>
         </div>
       </div>
 

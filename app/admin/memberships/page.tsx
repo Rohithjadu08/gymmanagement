@@ -21,7 +21,7 @@ export default function MembershipPlansPage() {
   const [formData, setFormData] = useState({
     name: '',
     duration_days: 30,
-    price: 1500,
+    price: 700,
     is_active: true,
   });
 
@@ -41,7 +41,7 @@ export default function MembershipPlansPage() {
     setFormData({
       name: '',
       duration_days: 30,
-      price: 1500,
+      price: 700,
       is_active: true,
     });
     setModalOpen(true);

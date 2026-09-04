@@ -37,7 +37,7 @@ export function generateWhatsAppReminderUrl({
   memberName,
   expiryDate,
   isOverdue,
-  gymName = 'Iron Pulse Gym',
+  gymName = 'SHIVA GYM',
 }: {
   phone: string;
   memberName: string;

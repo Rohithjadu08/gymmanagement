@@ -17,10 +17,10 @@ import { addDays, format, subDays } from 'date-fns';
 
 let mockSettings: GymSettings = {
   id: 'settings-1',
-  gym_name: 'Iron Pulse Gym',
+  gym_name: 'SHIVA GYM',
   logo_url: null,
-  phone: '+91 98765 43210',
-  whatsapp_number: '919876543210',
+  phone: '9600879081',
+  whatsapp_number: '919600879081',
   warning_days: 7,
   updated_at: new Date().toISOString(),
 };
@@ -28,36 +28,45 @@ let mockSettings: GymSettings = {
 let mockPlans: MembershipPlan[] = [
   {
     id: 'plan-1',
-    name: 'Monthly',
+    name: '1 Month',
     duration_days: 30,
-    price: 1500,
+    price: 700,
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
   {
     id: 'plan-2',
-    name: '3 Months',
-    duration_days: 90,
-    price: 4000,
+    name: '2 Months',
+    duration_days: 60,
+    price: 1200,
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
   {
     id: 'plan-3',
-    name: '6 Months',
-    duration_days: 180,
-    price: 7500,
+    name: '4 Months',
+    duration_days: 120,
+    price: 2000,
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
   {
     id: 'plan-4',
-    name: 'Yearly',
-    duration_days: 365,
-    price: 13500,
+    name: '6 Months',
+    duration_days: 180,
+    price: 2700,
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'plan-5',
+    name: '15 Months',
+    duration_days: 450,
+    price: 5500,
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -65,28 +74,61 @@ let mockPlans: MembershipPlan[] = [
 ];
 
 const today = new Date();
+const todayStr = format(today, 'yyyy-MM-dd');
 
 let mockMembers: Member[] = [
   {
     id: 'mem-1',
-    member_code: 'IP-1001',
+    member_code: 'SG-1001',
     full_name: 'Rahul Sharma',
     phone: '9876543210',
     email: 'rahul.sharma@example.com',
     joining_date: format(subDays(today, 60), 'yyyy-MM-dd'),
     notes: 'Focus on weight training',
+    training_goals: ['Gym Training', 'Body Building'],
+    has_treadmill: true,
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
   {
     id: 'mem-2',
-    member_code: 'IP-1002',
+    member_code: 'SG-1002',
     full_name: 'Priya Patel',
     phone: '9812345678',
     email: 'priya.patel@example.com',
     joining_date: format(subDays(today, 25), 'yyyy-MM-dd'),
     notes: 'Weight loss client',
+    training_goals: ['Personal Training', 'Treadmill'],
+    has_treadmill: true,
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'mem-3',
+    member_code: 'SG-1003',
+    full_name: 'Vikram Singh',
+    phone: '9988776655',
+    email: 'vikram.singh@example.com',
+    joining_date: format(subDays(today, 90), 'yyyy-MM-dd'),
+    notes: 'Morning slot regular',
+    training_goals: ['Gym Training'],
+    has_treadmill: false,
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'mem-4',
+    member_code: 'SG-1004',
+    full_name: 'Ananya Verma',
+    phone: '9765432109',
+    email: 'ananya.v@example.com',
+    joining_date: format(subDays(today, 120), 'yyyy-MM-dd'),
+    notes: 'Crossfit regular',
+    training_goals: ['Gym Training', 'Treadmill'],
+    has_treadmill: true,
     is_active: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -97,15 +139,50 @@ let mockPayments: Payment[] = [
   {
     id: 'pay-1',
     member_id: 'mem-1',
-    plan_id: 'plan-1',
-    amount: 1500,
+    plan_id: 'plan-3',
+    amount: 2300,
+    base_amount: 2000,
+    addon_amount: 300,
+    addon_name: 'Treadmill',
     payment_date: format(subDays(today, 10), 'yyyy-MM-dd'),
     start_date: format(subDays(today, 10), 'yyyy-MM-dd'),
-    expiry_date: format(addDays(today, 20), 'yyyy-MM-dd'),
+    expiry_date: format(addDays(today, 110), 'yyyy-MM-dd'),
     payment_method: 'UPI',
-    notes: 'GPay payment',
+    notes: 'GPay payment with Treadmill add-on',
+    created_at: new Date().toISOString(),
+    membership_plans: mockPlans[2],
+  },
+  {
+    id: 'pay-2',
+    member_id: 'mem-2',
+    plan_id: 'plan-1',
+    amount: 1000,
+    base_amount: 700,
+    addon_amount: 300,
+    addon_name: 'Treadmill',
+    payment_date: format(subDays(today, 26), 'yyyy-MM-dd'),
+    start_date: format(subDays(today, 26), 'yyyy-MM-dd'),
+    expiry_date: format(addDays(today, 4), 'yyyy-MM-dd'),
+    payment_method: 'Card',
+    notes: 'Credit Card',
     created_at: new Date().toISOString(),
     membership_plans: mockPlans[0],
+  },
+  {
+    id: 'pay-3',
+    member_id: 'mem-3',
+    plan_id: 'plan-2',
+    amount: 1200,
+    base_amount: 1200,
+    addon_amount: 0,
+    addon_name: null,
+    payment_date: format(subDays(today, 95), 'yyyy-MM-dd'),
+    start_date: format(subDays(today, 95), 'yyyy-MM-dd'),
+    expiry_date: format(subDays(today, 5), 'yyyy-MM-dd'),
+    payment_method: 'Cash',
+    notes: 'Cash payment',
+    created_at: new Date().toISOString(),
+    membership_plans: mockPlans[1],
   },
 ];
 
@@ -114,7 +191,7 @@ export let mockExercises: Exercise[] = [
     id: 'ex-1',
     name: 'Barbell Bench Press',
     muscle_group: 'Chest',
-    secondary_muscles: ['Triceps', 'Front Delts'],
+    secondary_muscles: ['Triceps', 'Shoulders'],
     description: 'The premier compound strength movement for chest mass and upper body pushing power.',
     instructions: [
       'Lie flat on bench with feet planted firmly on the floor.',
@@ -132,7 +209,7 @@ export let mockExercises: Exercise[] = [
     id: 'ex-2',
     name: 'Incline Dumbbell Press',
     muscle_group: 'Chest',
-    secondary_muscles: ['Upper Chest', 'Triceps'],
+    secondary_muscles: ['Shoulders', 'Triceps'],
     description: 'Targets upper pectoral fibers for complete chest development.',
     instructions: [
       'Set bench to a 30-45 degree incline.',
@@ -150,7 +227,7 @@ export let mockExercises: Exercise[] = [
     id: 'ex-3',
     name: 'Lat Pulldown',
     muscle_group: 'Back',
-    secondary_muscles: ['Biceps', 'Rear Delts'],
+    secondary_muscles: ['Biceps', 'Shoulders'],
     description: 'Builds latissimus dorsi width and upper back thickness.',
     instructions: [
       'Grip wide bar with overhand grip wider than shoulders.',
@@ -166,26 +243,26 @@ export let mockExercises: Exercise[] = [
   },
   {
     id: 'ex-4',
-    name: 'Barbell Back Squat',
-    muscle_group: 'Legs',
-    secondary_muscles: ['Glutes', 'Hamstrings', 'Core'],
-    description: 'The king of lower body movements for quad development and leg strength.',
+    name: 'Barbell Bent-Over Row',
+    muscle_group: 'Back',
+    secondary_muscles: ['Biceps', 'Forearms', 'Core'],
+    description: 'Essential free-weight rowing exercise for middle back and lat thickness.',
     instructions: [
-      'Rest barbell securely across upper traps.',
-      'Stand with feet shoulder-width apart, toes turned slightly out.',
-      'Brace core and lower hips back and down until thighs are parallel to floor.',
-      'Drive through heels and extend knees and hips back to standing position.',
+      'Hinge forward at hips keeping spine neutral and knees slightly bent.',
+      'Grip bar slightly wider than shoulder-width with overhand grip.',
+      'Pull bar to lower sternum squeezing shoulder blades together.',
+      'Lower bar with full control under resistance.',
     ],
-    difficulty: 'Advanced',
-    equipment: 'Barbell & Squat Rack',
-    image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
+    difficulty: 'Intermediate',
+    equipment: 'Barbell',
+    image_url: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=600&q=80',
     created_at: new Date().toISOString(),
   },
   {
     id: 'ex-5',
     name: 'Dumbbell Shoulder Press',
     muscle_group: 'Shoulders',
-    secondary_muscles: ['Triceps', 'Upper Traps'],
+    secondary_muscles: ['Triceps'],
     description: 'Overhead pressing movement for anterior and lateral deltoid mass.',
     instructions: [
       'Sit upright on bench holding dumbbells at shoulder level.',
@@ -199,8 +276,24 @@ export let mockExercises: Exercise[] = [
   },
   {
     id: 'ex-6',
+    name: 'Standing Dumbbell Lateral Raise',
+    muscle_group: 'Shoulders',
+    secondary_muscles: ['Traps'],
+    description: 'Isolated lateral deltoid raise to build shoulder width and capping shape.',
+    instructions: [
+      'Stand holding dumbbells at sides with slight elbow bend.',
+      'Raise dumbbells outward until parallel to floor.',
+      'Pause briefly at top contracting side deltoids, then lower with control.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Dumbbells',
+    image_url: 'https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-7',
     name: 'Barbell Bicep Curl',
-    muscle_group: 'Arms',
+    muscle_group: 'Biceps',
     secondary_muscles: ['Forearms'],
     description: 'Strict curling movement for bicep peak and arm thickness.',
     instructions: [
@@ -211,6 +304,170 @@ export let mockExercises: Exercise[] = [
     difficulty: 'Beginner',
     equipment: 'Barbell',
     image_url: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-8',
+    name: 'Dumbbell Hammer Curls',
+    muscle_group: 'Biceps',
+    secondary_muscles: ['Forearms'],
+    description: 'Neutral grip curl targeting brachialis and forearm thickness.',
+    instructions: [
+      'Hold dumbbells with neutral palms-facing-in grip.',
+      'Curl dumbbells upward towards shoulders keeping upper arms still.',
+      'Lower smoothly without swinging hips.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Dumbbells',
+    image_url: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-9',
+    name: 'Tricep Rope Pushdown',
+    muscle_group: 'Triceps',
+    secondary_muscles: ['Forearms'],
+    description: 'Cable pushdown isolating lateral and medial heads of the triceps.',
+    instructions: [
+      'Attach rope attachment to high pulley.',
+      'Keep elbows tucked at sides and push rope down toward thighs.',
+      'Spread rope ends apart at bottom for peak contraction.',
+      'Return to 90 degree elbow bend under control.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Cable Machine & Rope',
+    image_url: 'https://images.unsplash.com/photo-1530822847156-5df684ec5ee1?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-10',
+    name: 'Barbell Skull Crushers',
+    muscle_group: 'Triceps',
+    secondary_muscles: ['Chest', 'Shoulders'],
+    description: 'Overhead tricep extension building long-head tricep horseshoe mass.',
+    instructions: [
+      'Lie on flat bench holding EZ bar with narrow grip over chest.',
+      'Bend elbows to lower bar towards forehead keeping upper arms vertical.',
+      'Extend arms back up to starting position squeezing triceps.',
+    ],
+    difficulty: 'Intermediate',
+    equipment: 'EZ Barbell & Bench',
+    image_url: 'https://images.unsplash.com/photo-1530822847156-5df684ec5ee1?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-11',
+    name: 'Barbell Wrist Curls',
+    muscle_group: 'Forearms',
+    secondary_muscles: ['Grip Strength'],
+    description: 'Direct forearm flexor isolation movement for grip strength and forearm girth.',
+    instructions: [
+      'Rest forearms on flat bench with wrists hanging over edge holding barbell.',
+      'Lower barbell allowing fingers to slightly uncurl.',
+      'Curl wrists upward as high as possible squeezing forearm flexors.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Barbell & Bench',
+    image_url: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-12',
+    name: 'Hanging Leg Raise',
+    muscle_group: 'Abs',
+    secondary_muscles: ['Hip Flexors', 'Grip'],
+    description: 'Core exercise targeting lower rectus abdominis and hip flexors.',
+    instructions: [
+      'Hang from pull-up bar with overhand grip.',
+      'Keep legs straight or slightly bent and raise them until parallel to floor.',
+      'Pause briefly, then lower legs with control without swinging.',
+    ],
+    difficulty: 'Intermediate',
+    equipment: 'Pull-up Bar',
+    image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-13',
+    name: 'Barbell Hip Thrust',
+    muscle_group: 'Glutes',
+    secondary_muscles: ['Hamstrings', 'Core'],
+    description: 'Premier isolation movement for maximum gluteus maximus activation and power.',
+    instructions: [
+      'Sit on floor with upper back against bench and padded barbell across hips.',
+      'Drive through heels to lift hips upward until torso and thighs form straight line.',
+      'Squeeze glutes forcefully at top for 2 seconds before lowering under control.',
+    ],
+    difficulty: 'Intermediate',
+    equipment: 'Barbell & Bench',
+    image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-14',
+    name: 'Barbell Back Squat',
+    muscle_group: 'Quadriceps',
+    secondary_muscles: ['Glutes', 'Hamstrings', 'Abs'],
+    description: 'The king of lower body movements for quad development and leg strength.',
+    instructions: [
+      'Rest barbell securely across upper traps.',
+      'Stand with feet shoulder-width apart, toes turned slightly out.',
+      'Brace core and lower hips back and down until thighs are parallel to floor.',
+      'Drive through heels and extend knees and hips back to standing position.',
+    ],
+    difficulty: 'Advanced',
+    equipment: 'Barbell & Squat Rack',
+    image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-15',
+    name: 'Leg Extension Machine',
+    muscle_group: 'Quadriceps',
+    secondary_muscles: [],
+    description: 'Pure isolated quadriceps extension for quad teardrop mass.',
+    instructions: [
+      'Adjust seat so knees align with machine pivot axis.',
+      'Hook ankles behind padded lever.',
+      'Extend legs upward until fully extended squeezing quads at top.',
+      'Lower weight smoothly back down.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Leg Extension Machine',
+    image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-16',
+    name: 'Romanian Deadlift (RDL)',
+    muscle_group: 'Hamstrings',
+    secondary_muscles: ['Glutes', 'Lower Back'],
+    description: 'Posterior chain builder focusing on hamstring stretch and glute extension.',
+    instructions: [
+      'Stand tall holding barbell with overhand grip.',
+      'Push hips backward while lowering bar down front of legs.',
+      'Maintain flat back until deep stretch is felt in hamstrings.',
+      'Drive hips forward to return to standing.',
+    ],
+    difficulty: 'Intermediate',
+    equipment: 'Barbell',
+    image_url: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-17',
+    name: 'Standing Calf Raise',
+    muscle_group: 'Calves',
+    secondary_muscles: ['Achilles Tendon'],
+    description: 'Direct gastrocnemius calf isolation for lower leg size and power.',
+    instructions: [
+      'Place balls of feet on block with heels hanging off.',
+      'Lower heels downward for deep stretch in calves.',
+      'Explode upward onto toes as high as possible and squeeze calf muscles.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Calf Block / Machine',
+    image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
     created_at: new Date().toISOString(),
   },
 ];
@@ -284,11 +541,18 @@ function isSupabaseConfigured() {
   return url && !url.includes('placeholder');
 }
 
+async function withTimeout<T>(promise: PromiseLike<T>, ms = 1000): Promise<T> {
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error('Supabase request timeout')), ms)
+  );
+  return Promise.race([Promise.resolve(promise), timeout]);
+}
+
 export async function getGymSettings(): Promise<GymSettings> {
   if (isSupabaseConfigured()) {
     try {
       const supabase = createBrowserClient();
-      const { data, error } = await supabase.from('gym_settings').select('*').single();
+      const { data, error } = await withTimeout(supabase.from('gym_settings').select('*').single());
       if (data && !error) return data as GymSettings;
     } catch (e) {
       console.warn('Supabase fetch failed:', e);
@@ -316,15 +580,25 @@ export async function updateGymSettings(settings: Partial<GymSettings>): Promise
   return mockSettings;
 }
 
+const OFFICIAL_PLAN_NAMES = ['1 Month', '2 Months', '4 Months', '6 Months', '15 Months'];
+
 export async function getMembershipPlans(): Promise<MembershipPlan[]> {
   if (isSupabaseConfigured()) {
     try {
       const supabase = createBrowserClient();
-      const { data, error } = await supabase
-        .from('membership_plans')
-        .select('*')
-        .order('duration_days', { ascending: true });
-      if (data && !error) return data as MembershipPlan[];
+      const { data, error } = await withTimeout(
+        supabase
+          .from('membership_plans')
+          .select('*')
+          .eq('is_active', true)
+          .order('duration_days', { ascending: true })
+      );
+      if (data && !error && data.length > 0) {
+        const filtered = (data as MembershipPlan[]).filter((p) =>
+          OFFICIAL_PLAN_NAMES.some((officialName) => p.name.toLowerCase().includes(officialName.toLowerCase()))
+        );
+        if (filtered.length > 0) return filtered;
+      }
     } catch (e) {
       console.warn('Supabase fetch failed:', e);
     }
@@ -392,8 +666,8 @@ export async function getMembers(
   if (isSupabaseConfigured()) {
     try {
       const supabase = createBrowserClient();
-      const { data: membersData } = await supabase.from('members').select('*').order('created_at', { ascending: false });
-      const { data: paymentsData } = await supabase.from('payments').select('*, membership_plans(*)');
+      const { data: membersData } = await withTimeout(supabase.from('members').select('*').order('created_at', { ascending: false }));
+      const { data: paymentsData } = await withTimeout(supabase.from('payments').select('*, membership_plans(*)'));
       if (membersData) membersList = membersData as Member[];
       if (paymentsData) paymentsList = paymentsData as Payment[];
     } catch (e) {
@@ -442,11 +716,11 @@ export async function getMemberById(id: string): Promise<{
   if (isSupabaseConfigured()) {
     try {
       const supabase = createBrowserClient();
-      const { data } = await supabase
+      const { data } = await withTimeout(supabase
         .from('payments')
         .select('*, membership_plans(*)')
         .eq('member_id', id)
-        .order('expiry_date', { ascending: false });
+        .order('expiry_date', { ascending: false }));
       if (data) memberPayments = data as Payment[];
     } catch (e) {
       console.warn('Supabase fetch failed:', e);
@@ -515,10 +789,10 @@ export async function getPayments(searchQuery?: string): Promise<Payment[]> {
   if (isSupabaseConfigured()) {
     try {
       const supabase = createBrowserClient();
-      const { data } = await supabase
+      const { data } = await withTimeout(supabase
         .from('payments')
         .select('*, members(*), membership_plans(*)')
-        .order('payment_date', { ascending: false });
+        .order('payment_date', { ascending: false }));
       if (data) paymentsList = data as Payment[];
     } catch (e) {
       console.warn('Supabase fetch payments failed:', e);
@@ -625,25 +899,46 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
 // -------------------------------------------------------------
 
 export async function getExercises(muscleGroupFilter?: string): Promise<Exercise[]> {
+  const filter = muscleGroupFilter?.trim();
+
   if (isSupabaseConfigured()) {
     try {
       const supabase = createBrowserClient();
       let query = supabase.from('exercises').select('*');
-      if (muscleGroupFilter && muscleGroupFilter !== 'ALL') {
-        query = query.eq('muscle_group', muscleGroupFilter);
+      if (filter && filter !== 'ALL') {
+        query = query.or(`muscle_group.ilike.${filter},secondary_muscles.cs.{${filter}}`);
       }
-      const { data } = await query;
+      const { data } = await withTimeout(query);
       if (data && data.length > 0) return data as Exercise[];
     } catch (e) {
       console.warn('Supabase get exercises failed:', e);
     }
   }
 
-  if (muscleGroupFilter && muscleGroupFilter !== 'ALL') {
-    return mockExercises.filter((e) => e.muscle_group.toLowerCase() === muscleGroupFilter.toLowerCase());
+  if (!filter || filter === 'ALL') {
+    return mockExercises;
   }
 
-  return mockExercises;
+  const targetLower = filter.toLowerCase();
+  
+  // Category mapping fallbacks (e.g., Arms -> Biceps, Triceps, Forearms; Legs -> Quadriceps, Hamstrings, Glutes, Calves)
+  const categoryMap: Record<string, string[]> = {
+    arms: ['biceps', 'triceps', 'forearms'],
+    legs: ['quadriceps', 'hamstrings', 'glutes', 'calves', 'legs'],
+    core: ['abs', 'core', 'lower back'],
+  };
+
+  const allowedMuscles = categoryMap[targetLower] || [targetLower];
+
+  return mockExercises.filter((e) => {
+    const primary = e.muscle_group.toLowerCase();
+    const secondaries = (e.secondary_muscles || []).map((m) => m.toLowerCase());
+    
+    return (
+      allowedMuscles.includes(primary) ||
+      secondaries.some((sec) => allowedMuscles.includes(sec))
+    );
+  });
 }
 
 export async function getWorkoutsForMember(memberId: string): Promise<WorkoutWithDetails[]> {

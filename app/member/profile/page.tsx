@@ -81,14 +81,18 @@ export default function MemberProfilePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Profile Card Sidebar */}
         <div className="bg-zinc-900/90 rounded-xl border border-zinc-800 p-6 text-center shadow-lg flex flex-col items-center">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 p-1 shadow-xl mb-4">
-            <div className="w-full h-full rounded-full bg-zinc-900 flex items-center justify-center text-amber-400 font-extrabold text-3xl">
-              {member?.full_name?.charAt(0) || 'M'}
+          <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-amber-500 to-amber-300 p-1 shadow-xl mb-4 overflow-hidden">
+            <div className="w-full h-full rounded-full bg-zinc-900 flex items-center justify-center text-amber-400 font-extrabold text-3xl overflow-hidden">
+              {member?.photo_url ? (
+                <img src={member.photo_url} alt={member.full_name} className="h-full w-full object-cover" />
+              ) : (
+                member?.full_name?.charAt(0) || 'M'
+              )}
             </div>
           </div>
 
           <h2 className="text-xl font-bold text-white">{member?.full_name}</h2>
-          <p className="text-xs text-amber-400 font-medium mt-0.5">{member?.member_code}</p>
+          <p className="text-xs text-amber-400 font-bold mt-0.5">{member?.member_code} • SHIVA GYM</p>
 
           <div className="mt-4 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
             {member?.status || 'ACTIVE'} MEMBER
@@ -103,6 +107,12 @@ export default function MemberProfilePage() {
               <span>Current Plan</span>
               <span className="text-amber-400 font-medium">{member?.plan_name || 'Standard'}</span>
             </div>
+            {member?.has_treadmill && (
+              <div className="flex justify-between text-zinc-400">
+                <span>Treadmill Add-on</span>
+                <span className="text-emerald-400 font-bold">Yes (₹300)</span>
+              </div>
+            )}
           </div>
         </div>
 

@@ -44,6 +44,8 @@ export interface Member {
   date_of_birth?: string | null;
   address?: string | null;
   notes?: string | null;
+  training_goals?: string[];
+  has_treadmill?: boolean;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -54,6 +56,9 @@ export interface Payment {
   member_id: string;
   plan_id: string;
   amount: number;
+  base_amount?: number;
+  addon_amount?: number;
+  addon_name?: string | null;
   payment_date: string;
   start_date: string;
   expiry_date: string;
@@ -61,6 +66,7 @@ export interface Payment {
   notes?: string | null;
   created_at: string;
   
+  // Optional relations
   membership_plans?: MembershipPlan;
   members?: Member;
 }
@@ -77,7 +83,22 @@ export interface MemberWithDetails extends Member {
 export interface Exercise {
   id: string;
   name: string;
-  muscle_group: 'Chest' | 'Back' | 'Legs' | 'Shoulders' | 'Arms' | 'Core';
+  muscle_group:
+    | 'Chest'
+    | 'Back'
+    | 'Legs'
+    | 'Shoulders'
+    | 'Arms'
+    | 'Core'
+    | 'Biceps'
+    | 'Triceps'
+    | 'Forearms'
+    | 'Abs'
+    | 'Glutes'
+    | 'Quadriceps'
+    | 'Hamstrings'
+    | 'Calves'
+    | string;
   secondary_muscles: string[];
   description: string;
   instructions: string[];

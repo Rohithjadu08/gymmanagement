@@ -55,8 +55,8 @@ export function MemberSidebar() {
             <Dumbbell className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="text-base font-bold text-white tracking-wide">IRON PULSE</h1>
-            <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Athlete Portal</p>
+            <h1 className="text-base font-extrabold text-white tracking-wide">SHIVA GYM</h1>
+            <p className="text-xs font-bold text-emerald-400 uppercase tracking-wider">SHAPE YOUR BODY</p>
           </div>
         </div>
 

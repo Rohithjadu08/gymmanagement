@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Iron Pulse Fitness | Gym Management System',
-  description: 'Premium fitness facility and gym management system for members, payments, and training programs.',
+  title: 'SHIVA GYM — SHAPE YOUR BODY | Management & Fitness Portal',
+  description: 'Official SHIVA GYM Management System for members, payments, workouts, and treadmill services. Contact: Balaji (9600879081).',
 };
 
 export default function RootLayout({

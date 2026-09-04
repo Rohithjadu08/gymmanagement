@@ -58,9 +58,11 @@ export default function AdminDashboardPage() {
       {/* Top Header & Quick Actions */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white">Gym Dashboard</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
+            SHIVA GYM <span className="text-emerald-400 text-sm font-semibold tracking-wider border border-emerald-800 bg-emerald-950/60 px-2.5 py-0.5 rounded-full uppercase">SHAPE YOUR BODY</span>
+          </h1>
           <p className="text-sm text-slate-400">
-            Real-time member status tracking, fee collections, and overdue alerts.
+            Real-time member status tracking, fee collections, and overdue alerts for SHIVA GYM.
           </p>
         </div>
 
@@ -141,6 +143,26 @@ export default function AdminDashboardPage() {
           )}
         </div>
       )}
+
+      {/* Shiva Gym Official Services & Info Banner */}
+      <div className="rounded-2xl border border-emerald-900/50 bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 p-5 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-black tracking-widest text-emerald-400 uppercase">OFFICIAL GYM SERVICES</span>
+              <span className="text-[10px] bg-emerald-900/50 text-emerald-300 px-2 py-0.5 rounded font-mono">BALAJI — 9600879081</span>
+            </div>
+            <h2 className="text-lg font-bold text-white">SHIVA GYM — Shape Your Body</h2>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="bg-slate-800 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium">💪 Gym Training</span>
+            <span className="bg-slate-800 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium">🏋️ Personal Training</span>
+            <span className="bg-slate-800 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium">🏆 Body Building</span>
+            <span className="bg-slate-800 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium">⚙️ State-of-the-Art Equipment</span>
+            <span className="bg-emerald-950 border border-emerald-800 text-emerald-300 px-3 py-1.5 rounded-lg font-bold">🏃 Treadmill (+₹300 Add-on)</span>
+          </div>
+        </div>
+      </div>
 
       {/* KPI Cards (6 Core Metrics) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

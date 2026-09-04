@@ -58,8 +58,8 @@ export function AdminSidebar() {
             <Dumbbell className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="text-base font-bold text-white tracking-wide">IRON PULSE</h1>
-            <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Gym Management</p>
+            <h1 className="text-base font-extrabold text-white tracking-wide">SHIVA GYM</h1>
+            <p className="text-xs font-bold text-emerald-400 uppercase tracking-wider">SHAPE YOUR BODY</p>
           </div>
         </div>
 
@@ -114,7 +114,7 @@ export function AdminSidebar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
             <Dumbbell className="h-4 w-4" />
           </div>
-          <span className="font-bold text-white text-sm">IRON PULSE GYM</span>
+          <span className="font-bold text-white text-sm">SHIVA GYM</span>
         </div>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

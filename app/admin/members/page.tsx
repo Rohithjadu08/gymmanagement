@@ -142,13 +142,17 @@ export default function MembersListPage() {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 text-white font-extrabold text-lg shadow-md">
-                      {member.full_name.charAt(0)}
+                    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 text-white font-extrabold text-lg shadow-md overflow-hidden border border-slate-700">
+                      {member.photo_url ? (
+                        <img src={member.photo_url} alt={member.full_name} className="h-full w-full object-cover" />
+                      ) : (
+                        member.full_name.charAt(0)
+                      )}
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <Link
                         href={`/admin/members/${member.id}`}
-                        className="font-bold text-white text-base hover:text-emerald-400 hover:underline transition-colors"
+                        className="font-bold text-white text-base hover:text-emerald-400 hover:underline transition-colors truncate block"
                       >
                         {member.full_name}
                       </Link>
@@ -160,10 +164,18 @@ export default function MembersListPage() {
                   </div>
 
                   <div className="rounded-xl bg-slate-950/70 p-3 text-xs space-y-1.5 border border-slate-800/80">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <span className="text-slate-400">Current Plan:</span>
                       <span className="font-semibold text-slate-200">{member.plan_name || 'No Plan'}</span>
                     </div>
+                    {member.has_treadmill && (
+                      <div className="flex justify-between items-center text-[11px]">
+                        <span className="text-slate-400">Add-on:</span>
+                        <span className="font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">
+                          🏃 Treadmill (+₹300)
+                        </span>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-slate-400">Expiry Date:</span>
                       <span className="font-semibold text-slate-200">{formatDate(member.expiry_date)}</span>

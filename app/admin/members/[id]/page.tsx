@@ -118,8 +118,12 @@ export default function MemberProfilePage() {
       <Card className="border-slate-800 bg-slate-900/90 p-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white font-extrabold text-3xl shadow-xl ring-4 ring-emerald-500/20">
-              {member.full_name.charAt(0)}
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white font-extrabold text-3xl shadow-xl ring-4 ring-emerald-500/20 overflow-hidden border border-slate-700">
+              {member.photo_url ? (
+                <img src={member.photo_url} alt={member.full_name} className="h-full w-full object-cover" />
+              ) : (
+                member.full_name.charAt(0)
+              )}
             </div>
 
             <div className="space-y-1">
@@ -167,7 +171,7 @@ export default function MemberProfilePage() {
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <User className="h-4 w-4 text-emerald-400" />
-                Personal Information
+                Personal Information & Services
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-sm divide-y divide-slate-800/60">
@@ -187,6 +191,24 @@ export default function MemberProfilePage() {
                 <span className="text-slate-400">Joining Date:</span>
                 <span className="font-semibold text-white">{formatDate(member.joining_date)}</span>
               </div>
+              <div className="pt-3 flex justify-between items-center">
+                <span className="text-slate-400">Treadmill Service:</span>
+                <span className={`font-bold text-xs px-2 py-0.5 rounded ${member.has_treadmill ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-slate-800 text-slate-400'}`}>
+                  {member.has_treadmill ? 'Yes (+₹300)' : 'No'}
+                </span>
+              </div>
+              {member.training_goals && member.training_goals.length > 0 && (
+                <div className="pt-3 space-y-1.5">
+                  <span className="text-slate-400 text-xs font-semibold uppercase">Training Goals / Interest:</span>
+                  <div className="flex flex-wrap gap-1">
+                    {member.training_goals.map((g) => (
+                      <span key={g} className="text-xs bg-slate-800 text-emerald-300 px-2 py-0.5 rounded border border-slate-700">
+                        {g}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="pt-3 flex justify-between">
                 <span className="text-slate-400">Account Status:</span>
                 <span className={`font-bold ${member.is_active ? 'text-emerald-400' : 'text-rose-400'}`}>
@@ -215,7 +237,7 @@ export default function MemberProfilePage() {
                   Payment History Ledger
                 </CardTitle>
                 <CardDescription>
-                  Complete historical record of payments and renewals for this member
+                  Complete historical record of payments, base plan fees, and treadmill add-ons
                 </CardDescription>
               </div>
               <Button
@@ -239,10 +261,10 @@ export default function MemberProfilePage() {
                       <tr className="border-b border-slate-800 text-xs font-semibold uppercase text-slate-400">
                         <th className="pb-3">Payment Date</th>
                         <th className="pb-3">Plan Name</th>
-                        <th className="pb-3">Amount</th>
+                        <th className="pb-3">Fee Breakdown</th>
+                        <th className="pb-3">Total Paid</th>
                         <th className="pb-3">Duration / Expiry</th>
                         <th className="pb-3">Method</th>
-                        <th className="pb-3">Notes</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60">
@@ -251,6 +273,10 @@ export default function MemberProfilePage() {
                           <td className="py-3.5 font-medium text-white">{formatDate(p.payment_date)}</td>
                           <td className="py-3.5 text-emerald-400 font-semibold">
                             {p.membership_plans?.name || 'Membership Plan'}
+                          </td>
+                          <td className="py-3.5 text-xs text-slate-300">
+                            Base: ₹{p.base_amount || p.amount}
+                            {p.addon_amount ? <span className="text-emerald-400 ml-1">(+{p.addon_name || 'Add-on'} ₹{p.addon_amount})</span> : ''}
                           </td>
                           <td className="py-3.5 font-bold text-white">{formatCurrency(p.amount)}</td>
                           <td className="py-3.5 text-xs text-slate-300">
@@ -261,7 +287,6 @@ export default function MemberProfilePage() {
                               {p.payment_method}
                             </span>
                           </td>
-                          <td className="py-3.5 text-xs text-slate-400">{p.notes || '-'}</td>
                         </tr>
                       ))}
                     </tbody>
