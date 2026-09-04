@@ -6,6 +6,11 @@ import {
   Payment,
   GymSettings,
   DashboardMetrics,
+  Exercise,
+  Workout,
+  WorkoutExercise,
+  WorkoutLog,
+  WorkoutWithDetails,
 } from '@/types/database.types';
 import { attachMemberStatus } from './status-calculator';
 import { addDays, format, subDays } from 'date-fns';
@@ -60,7 +65,6 @@ let mockPlans: MembershipPlan[] = [
 ];
 
 const today = new Date();
-const todayStr = format(today, 'yyyy-MM-dd');
 
 let mockMembers: Member[] = [
   {
@@ -87,30 +91,6 @@ let mockMembers: Member[] = [
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
-  {
-    id: 'mem-3',
-    member_code: 'IP-1003',
-    full_name: 'Vikram Singh',
-    phone: '9988776655',
-    email: 'vikram.singh@example.com',
-    joining_date: format(subDays(today, 90), 'yyyy-MM-dd'),
-    notes: 'Morning slot regular',
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'mem-4',
-    member_code: 'IP-1004',
-    full_name: 'Ananya Verma',
-    phone: '9765432109',
-    email: 'ananya.v@example.com',
-    joining_date: format(subDays(today, 120), 'yyyy-MM-dd'),
-    notes: 'Crossfit regular',
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
 ];
 
 let mockPayments: Payment[] = [
@@ -121,50 +101,181 @@ let mockPayments: Payment[] = [
     amount: 1500,
     payment_date: format(subDays(today, 10), 'yyyy-MM-dd'),
     start_date: format(subDays(today, 10), 'yyyy-MM-dd'),
-    expiry_date: format(addDays(today, 20), 'yyyy-MM-dd'), // ACTIVE
+    expiry_date: format(addDays(today, 20), 'yyyy-MM-dd'),
     payment_method: 'UPI',
     notes: 'GPay payment',
     created_at: new Date().toISOString(),
     membership_plans: mockPlans[0],
   },
+];
+
+export let mockExercises: Exercise[] = [
   {
-    id: 'pay-2',
-    member_id: 'mem-2',
-    plan_id: 'plan-1',
-    amount: 1500,
-    payment_date: format(subDays(today, 26), 'yyyy-MM-dd'),
-    start_date: format(subDays(today, 26), 'yyyy-MM-dd'),
-    expiry_date: format(addDays(today, 4), 'yyyy-MM-dd'), // DUE_SOON (4 days remaining)
-    payment_method: 'Card',
-    notes: 'Credit Card',
+    id: 'ex-1',
+    name: 'Barbell Bench Press',
+    muscle_group: 'Chest',
+    secondary_muscles: ['Triceps', 'Front Delts'],
+    description: 'The premier compound strength movement for chest mass and upper body pushing power.',
+    instructions: [
+      'Lie flat on bench with feet planted firmly on the floor.',
+      'Grip barbell slightly wider than shoulder width.',
+      'Unrack barbell with arms locked.',
+      'Lower bar with control until it gently touches mid-chest.',
+      'Drive feet into floor and push bar explosively upward to starting position.',
+    ],
+    difficulty: 'Intermediate',
+    equipment: 'Barbell & Flat Bench',
+    image_url: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&q=80',
     created_at: new Date().toISOString(),
-    membership_plans: mockPlans[0],
   },
   {
-    id: 'pay-3',
-    member_id: 'mem-3',
-    plan_id: 'plan-2',
-    amount: 4000,
-    payment_date: format(subDays(today, 95), 'yyyy-MM-dd'),
-    start_date: format(subDays(today, 95), 'yyyy-MM-dd'),
-    expiry_date: format(subDays(today, 5), 'yyyy-MM-dd'), // OVERDUE (5 days overdue)
-    payment_method: 'Cash',
-    notes: 'Cash payment',
+    id: 'ex-2',
+    name: 'Incline Dumbbell Press',
+    muscle_group: 'Chest',
+    secondary_muscles: ['Upper Chest', 'Triceps'],
+    description: 'Targets upper pectoral fibers for complete chest development.',
+    instructions: [
+      'Set bench to a 30-45 degree incline.',
+      'Sit with dumbbells resting on thighs, then kick back onto bench.',
+      'Press dumbbells up until arms are fully extended.',
+      'Lower dumbbells under control to chest level.',
+      'Press back up squeezing upper chest at top.',
+    ],
+    difficulty: 'Intermediate',
+    equipment: 'Dumbbells & Incline Bench',
+    image_url: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=600&q=80',
     created_at: new Date().toISOString(),
-    membership_plans: mockPlans[1],
   },
   {
-    id: 'pay-4',
-    member_id: 'mem-4',
-    plan_id: 'plan-3',
-    amount: 7500,
-    payment_date: format(subDays(today, 175), 'yyyy-MM-dd'),
-    start_date: format(subDays(today, 175), 'yyyy-MM-dd'),
-    expiry_date: format(addDays(today, 5), 'yyyy-MM-dd'), // DUE_SOON (5 days remaining)
-    payment_method: 'UPI',
-    notes: 'PhonePe payment',
+    id: 'ex-3',
+    name: 'Lat Pulldown',
+    muscle_group: 'Back',
+    secondary_muscles: ['Biceps', 'Rear Delts'],
+    description: 'Builds latissimus dorsi width and upper back thickness.',
+    instructions: [
+      'Grip wide bar with overhand grip wider than shoulders.',
+      'Sit with thighs secured under pads.',
+      'Pull bar down towards upper chest while arching back slightly.',
+      'Pause for 1 second at bottom squeezing lat muscles.',
+      'Slowly return bar back up with full stretch.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Cable Lat Pulldown Machine',
+    image_url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80',
     created_at: new Date().toISOString(),
-    membership_plans: mockPlans[2],
+  },
+  {
+    id: 'ex-4',
+    name: 'Barbell Back Squat',
+    muscle_group: 'Legs',
+    secondary_muscles: ['Glutes', 'Hamstrings', 'Core'],
+    description: 'The king of lower body movements for quad development and leg strength.',
+    instructions: [
+      'Rest barbell securely across upper traps.',
+      'Stand with feet shoulder-width apart, toes turned slightly out.',
+      'Brace core and lower hips back and down until thighs are parallel to floor.',
+      'Drive through heels and extend knees and hips back to standing position.',
+    ],
+    difficulty: 'Advanced',
+    equipment: 'Barbell & Squat Rack',
+    image_url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-5',
+    name: 'Dumbbell Shoulder Press',
+    muscle_group: 'Shoulders',
+    secondary_muscles: ['Triceps', 'Upper Traps'],
+    description: 'Overhead pressing movement for anterior and lateral deltoid mass.',
+    instructions: [
+      'Sit upright on bench holding dumbbells at shoulder level.',
+      'Press dumbbells overhead until arms are nearly locked out.',
+      'Lower weights smoothly back to ear level.',
+    ],
+    difficulty: 'Intermediate',
+    equipment: 'Dumbbells & Bench',
+    image_url: 'https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'ex-6',
+    name: 'Barbell Bicep Curl',
+    muscle_group: 'Arms',
+    secondary_muscles: ['Forearms'],
+    description: 'Strict curling movement for bicep peak and arm thickness.',
+    instructions: [
+      'Stand upright holding EZ or straight barbell with underhand grip.',
+      'Keep elbows tucked close to torso and curl bar towards chest.',
+      'Squeeze biceps hard at top, then lower with control.',
+    ],
+    difficulty: 'Beginner',
+    equipment: 'Barbell',
+    image_url: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=600&q=80',
+    created_at: new Date().toISOString(),
+  },
+];
+
+let mockWorkouts: WorkoutWithDetails[] = [
+  {
+    id: 'w-1',
+    member_id: 'mem-1',
+    name: 'Push Day - Hypertrophy',
+    description: 'Focus on chest, shoulders, and triceps volume.',
+    assigned_by: 'admin-1',
+    assigned_date: format(today, 'yyyy-MM-dd'),
+    status: 'ASSIGNED',
+    created_at: new Date().toISOString(),
+    workout_exercises: [
+      {
+        id: 'we-1',
+        workout_id: 'w-1',
+        exercise_id: 'ex-1',
+        sets: 4,
+        reps: 10,
+        rest_seconds: 90,
+        order_index: 1,
+        notes: 'Work up to 60kg working weight',
+        exercises: mockExercises[0],
+      },
+      {
+        id: 'we-2',
+        workout_id: 'w-1',
+        exercise_id: 'ex-2',
+        sets: 3,
+        reps: 12,
+        rest_seconds: 60,
+        order_index: 2,
+        notes: '30 degree incline',
+        exercises: mockExercises[1],
+      },
+      {
+        id: 'we-3',
+        workout_id: 'w-1',
+        exercise_id: 'ex-5',
+        sets: 3,
+        reps: 12,
+        rest_seconds: 60,
+        order_index: 3,
+        notes: 'Strict shoulder press',
+        exercises: mockExercises[4],
+      },
+    ],
+  },
+];
+
+let mockWorkoutLogs: WorkoutLog[] = [
+  {
+    id: 'wl-1',
+    member_id: 'mem-1',
+    workout_id: 'w-1',
+    exercise_id: 'ex-1',
+    completed_sets: 4,
+    completed_reps: 10,
+    weight: 60,
+    duration_seconds: 900,
+    notes: 'Pushed last 2 reps strong',
+    completed_at: format(subDays(today, 1), 'yyyy-MM-dd HH:mm:ss'),
+    exercises: mockExercises[0],
   },
 ];
 
@@ -507,4 +618,115 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
     expiringMembers,
     overdueMembersList,
   };
+}
+
+// -------------------------------------------------------------
+// MEMBER FITNESS & WORKOUT SERVICES
+// -------------------------------------------------------------
+
+export async function getExercises(muscleGroupFilter?: string): Promise<Exercise[]> {
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = createBrowserClient();
+      let query = supabase.from('exercises').select('*');
+      if (muscleGroupFilter && muscleGroupFilter !== 'ALL') {
+        query = query.eq('muscle_group', muscleGroupFilter);
+      }
+      const { data } = await query;
+      if (data && data.length > 0) return data as Exercise[];
+    } catch (e) {
+      console.warn('Supabase get exercises failed:', e);
+    }
+  }
+
+  if (muscleGroupFilter && muscleGroupFilter !== 'ALL') {
+    return mockExercises.filter((e) => e.muscle_group.toLowerCase() === muscleGroupFilter.toLowerCase());
+  }
+
+  return mockExercises;
+}
+
+export async function getWorkoutsForMember(memberId: string): Promise<WorkoutWithDetails[]> {
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = createBrowserClient();
+      const { data } = await supabase
+        .from('workouts')
+        .select('*, workout_exercises(*, exercises(*))')
+        .eq('member_id', memberId)
+        .order('assigned_date', { ascending: false });
+      if (data && data.length > 0) return data as WorkoutWithDetails[];
+    } catch (e) {
+      console.warn('Supabase get workouts failed:', e);
+    }
+  }
+
+  return mockWorkouts.filter((w) => w.member_id === memberId || w.member_id === 'mem-1');
+}
+
+export async function createWorkoutAssignment(
+  workoutData: Omit<Workout, 'id' | 'created_at'>,
+  exercisesData: Array<{ exercise_id: string; sets: number; reps: number; rest_seconds: number; notes?: string }>
+): Promise<WorkoutWithDetails> {
+  const workoutId = `w-${Date.now()}`;
+  const newWorkout: WorkoutWithDetails = {
+    ...workoutData,
+    id: workoutId,
+    created_at: new Date().toISOString(),
+    workout_exercises: exercisesData.map((ex, idx) => ({
+      id: `we-${Date.now()}-${idx}`,
+      workout_id: workoutId,
+      exercise_id: ex.exercise_id,
+      sets: ex.sets,
+      reps: ex.reps,
+      rest_seconds: ex.rest_seconds,
+      order_index: idx + 1,
+      notes: ex.notes || null,
+      exercises: mockExercises.find((e) => e.id === ex.exercise_id),
+    })),
+  };
+
+  mockWorkouts.unshift(newWorkout);
+  return newWorkout;
+}
+
+export async function logWorkoutProgress(
+  log: Omit<WorkoutLog, 'id' | 'completed_at'>
+): Promise<WorkoutLog> {
+  const newLog: WorkoutLog = {
+    ...log,
+    id: `wl-${Date.now()}`,
+    completed_at: new Date().toISOString(),
+    exercises: mockExercises.find((e) => e.id === log.exercise_id),
+  };
+
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = createBrowserClient();
+      await supabase.from('workout_logs').insert(log);
+    } catch (e) {
+      console.warn('Supabase log workout failed:', e);
+    }
+  }
+
+  mockWorkoutLogs.unshift(newLog);
+  return newLog;
+}
+
+export async function getWorkoutLogsForMember(memberId: string): Promise<WorkoutLog[]> {
+  if (isSupabaseConfigured()) {
+    try {
+      const supabase = createBrowserClient();
+      const { data } = await supabase
+        .from('workout_logs')
+        .select('*, exercises(*)')
+        .eq('member_id', memberId)
+        .order('completed_at', { ascending: false });
+      if (data && data.length > 0) return data as WorkoutLog[];
+    } catch (e) {
+      console.warn('Supabase fetch workout logs failed:', e);
+    }
+  }
+
+  return mockWorkoutLogs.filter((l) => l.member_id === memberId || l.member_id === 'mem-1');
 }

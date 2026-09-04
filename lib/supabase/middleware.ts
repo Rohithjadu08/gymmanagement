@@ -27,28 +27,42 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // IMPORTANT: Do not run code between createServerClient and getUser to avoid subtle auth issues
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isLoginPage = request.nextUrl.pathname === '/admin/login';
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin');
+  const pathname = request.nextUrl.pathname;
+  const isAdminRoute = pathname.startsWith('/admin');
+  const isMemberRoute = pathname.startsWith('/member');
+  const isAdminLoginPage = pathname === '/admin/login';
+  const isMemberLoginPage = pathname === '/member/login';
 
-  if (isAdminRoute && !isLoginPage && !user) {
-    // Unauthenticated user trying to access admin dashboard
+  // Protect Admin Routes
+  if (isAdminRoute && !isAdminLoginPage && !user) {
     const url = request.nextUrl.clone();
     url.pathname = '/admin/login';
     return NextResponse.redirect(url);
   }
 
-  if (isLoginPage && user) {
-    // Authenticated user trying to access login page
+  // Protect Member Routes
+  if (isMemberRoute && !isMemberLoginPage && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/member/login';
+    return NextResponse.redirect(url);
+  }
+
+  // Redirect Authenticated users visiting login pages
+  if (isAdminLoginPage && user) {
     const url = request.nextUrl.clone();
     url.pathname = '/admin/dashboard';
     return NextResponse.redirect(url);
   }
 
+  if (isMemberLoginPage && user) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/member/dashboard';
+    return NextResponse.redirect(url);
+  }
+
   return supabaseResponse;
 }
-

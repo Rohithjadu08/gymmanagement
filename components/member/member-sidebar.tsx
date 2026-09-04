@@ -5,37 +5,34 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
-  Users,
+  User,
   CreditCard,
-  BellRing,
-  BarChart3,
-  Settings,
-  LogOut,
   Dumbbell,
+  LogOut,
   Menu,
   X,
   Sparkles,
+  Activity,
+  CalendarCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
 
-const navItems = [
-  { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { name: 'Members', href: '/admin/members', icon: Users },
-  { name: 'Workout Routines', href: '/admin/workouts', icon: Dumbbell },
-  { name: 'Membership Plans', href: '/admin/memberships', icon: Sparkles },
-  { name: 'Payments', href: '/admin/payments', icon: CreditCard },
-  { name: 'Fee Reminders', href: '/admin/reminders', icon: BellRing },
-  { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
+const memberNavItems = [
+  { name: 'Dashboard', href: '/member/dashboard', icon: LayoutDashboard },
+  { name: 'My Profile', href: '/member/profile', icon: User },
+  { name: 'My Membership', href: '/member/membership', icon: Sparkles },
+  { name: 'My Payments', href: '/member/payments', icon: CreditCard },
+  { name: 'My Workouts', href: '/member/workouts', icon: Dumbbell },
+  { name: 'My Fitness (3D)', href: '/member/fitness', icon: Activity },
 ];
 
-export function AdminSidebar() {
+export function MemberSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  if (pathname === '/admin/login') {
+  if (pathname === '/member/login') {
     return null;
   }
 
@@ -46,7 +43,7 @@ export function AdminSidebar() {
     } catch (e) {
       console.warn('Sign out error:', e);
     }
-    router.push('/admin/login');
+    router.push('/member/login');
   };
 
   const NavContent = () => (
@@ -59,14 +56,14 @@ export function AdminSidebar() {
           </div>
           <div>
             <h1 className="text-base font-bold text-white tracking-wide">IRON PULSE</h1>
-            <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Gym Management</p>
+            <p className="text-xs font-semibold text-emerald-400 uppercase tracking-widest">Athlete Portal</p>
           </div>
         </div>
 
         {/* Navigation Links */}
         <nav className="mt-6 space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== '/admin/dashboard' && pathname.startsWith(item.href));
+          {memberNavItems.map((item) => {
+            const isActive = pathname === item.href || (item.href !== '/member/dashboard' && pathname.startsWith(item.href));
             const Icon = item.icon;
             return (
               <Link
@@ -108,13 +105,13 @@ export function AdminSidebar() {
         <NavContent />
       </aside>
 
-      {/* Mobile Top Navbar */}
+      {/* Mobile Top Header */}
       <header className="flex h-16 items-center justify-between border-b border-slate-800 bg-slate-950 px-4 lg:hidden sticky top-0 z-30">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white">
             <Dumbbell className="h-4 w-4" />
           </div>
-          <span className="font-bold text-white text-sm">IRON PULSE GYM</span>
+          <span className="font-bold text-white text-sm">ATHLETE PORTAL</span>
         </div>
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -136,6 +133,28 @@ export function AdminSidebar() {
           </div>
         </div>
       )}
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-800 bg-slate-950/95 backdrop-blur-xl p-2 lg:hidden flex justify-around items-center">
+        {memberNavItems.slice(0, 5).map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                'flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-semibold transition-colors',
+                isActive ? 'text-emerald-400 font-bold' : 'text-slate-400 hover:text-white'
+              )}
+            >
+              <Icon className="h-5 w-5" />
+              <span>{item.name.replace('My ', '')}</span>
+            </Link>
+          );
+        })}
+      </div>
     </>
   );
 }
+
