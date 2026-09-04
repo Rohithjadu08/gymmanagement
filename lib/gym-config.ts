@@ -1,6 +1,7 @@
 export const SHIVA_GYM_CONFIG = {
   gym_name: 'SHIVA GYM',
   tagline: 'SHAPE YOUR BODY',
+  logo_url: '/images/shiva-gym-logo.png',
   owner_name: 'BALAJI',
   phone: '9600879081',
   formatted_phone: '+91 96008 79081',

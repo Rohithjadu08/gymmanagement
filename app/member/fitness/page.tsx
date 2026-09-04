@@ -98,13 +98,15 @@ export default function MemberFitness3DPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-5">
         <div>
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
-              <Sparkles className="w-5 h-5" />
-            </div>
+          <div className="flex items-center gap-3">
+            <img
+              src="/images/shiva-gym-logo.png"
+              alt="SHIVA GYM Logo"
+              className="w-12 h-12 rounded-xl border border-amber-500/30 object-contain bg-zinc-950 p-1 shadow-md shrink-0"
+            />
             <div>
-              <h1 className="text-2xl font-extrabold text-white tracking-tight">
-                Interactive 3D Fitness & Anatomy
+              <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                SHIVA GYM — Interactive 3D Fitness & Anatomy
               </h1>
               <p className="text-xs text-zinc-400 mt-0.5">
                 Rotate & select muscle regions on the 3D model to explore target exercises, form instructions, and log your progress.

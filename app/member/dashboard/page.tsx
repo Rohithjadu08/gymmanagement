@@ -97,20 +97,18 @@ export default function MemberDashboardPage() {
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-2xl font-bold shadow-inner overflow-hidden shrink-0">
-              {member?.photo_url ? (
-                <img src={member.photo_url} alt={member.full_name} className="h-full w-full object-cover" />
-              ) : (
-                member?.full_name?.charAt(0) || 'M'
-              )}
-            </div>
+            <img
+              src="/images/shiva-gym-logo.png"
+              alt="SHIVA GYM Logo"
+              className="w-14 h-14 rounded-2xl border border-amber-500/30 object-contain bg-zinc-950 p-1 shadow-lg shrink-0"
+            />
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
                   SHIVA GYM <span className="text-amber-400 text-xs font-bold uppercase tracking-wider ml-1">SHAPE YOUR BODY</span>
                 </h1>
               </div>
-              <p className="text-sm font-semibold text-zinc-300 mt-1">
+              <p className="text-sm font-semibold text-zinc-300 mt-0.5">
                 Athlete: {member?.full_name || 'Member'} • ID: {member?.member_code}
               </p>
               <p className="text-xs text-zinc-400 mt-0.5">

@@ -52,14 +52,18 @@ export function AdminSidebar() {
   const NavContent = () => (
     <div className="flex h-full flex-col justify-between p-4 text-slate-300">
       <div>
-        {/* Brand Header */}
-        <div className="flex items-center gap-3 px-3 py-4 border-b border-slate-800">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-lg shadow-emerald-500/20">
-            <Dumbbell className="h-6 w-6" />
+        {/* Brand Header with Official Shiva Gym Logo */}
+        <div className="flex flex-col items-center justify-center p-3 pb-4 border-b border-slate-800 space-y-2 text-center">
+          <div className="relative w-36 h-36 rounded-2xl overflow-hidden shadow-xl border border-slate-800 bg-slate-950 flex items-center justify-center p-1.5 group hover:border-emerald-500/50 transition-all">
+            <img
+              src="/images/shiva-gym-logo.png"
+              alt="SHIVA GYM Official Logo"
+              className="w-full h-full object-contain rounded-xl"
+            />
           </div>
           <div>
             <h1 className="text-base font-extrabold text-white tracking-wide">SHIVA GYM</h1>
-            <p className="text-xs font-bold text-emerald-400 uppercase tracking-wider">SHAPE YOUR BODY</p>
+            <p className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest">SHAPE YOUR BODY</p>
           </div>
         </div>
 

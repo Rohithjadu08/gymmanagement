@@ -57,13 +57,20 @@ export default function AdminDashboardPage() {
     <div className="space-y-8">
       {/* Top Header & Quick Actions */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-            SHIVA GYM <span className="text-emerald-400 text-sm font-semibold tracking-wider border border-emerald-800 bg-emerald-950/60 px-2.5 py-0.5 rounded-full uppercase">SHAPE YOUR BODY</span>
-          </h1>
-          <p className="text-sm text-slate-400">
-            Real-time member status tracking, fee collections, and overdue alerts for SHIVA GYM.
-          </p>
+        <div className="flex items-center gap-3">
+          <img
+            src="/images/shiva-gym-logo.png"
+            alt="SHIVA GYM Logo"
+            className="w-12 h-12 rounded-xl border border-slate-800 object-contain bg-slate-900 p-0.5 shadow-md shrink-0"
+          />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex flex-wrap items-center gap-2">
+              SHIVA GYM <span className="text-emerald-400 text-xs font-semibold tracking-wider border border-emerald-800 bg-emerald-950/60 px-2.5 py-0.5 rounded-full uppercase">SHAPE YOUR BODY</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Real-time member status tracking, fee collections, and overdue alerts for SHIVA GYM.
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">

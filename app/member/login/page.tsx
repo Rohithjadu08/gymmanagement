@@ -84,13 +84,17 @@ export default function MemberLoginPage() {
       <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md space-y-6 relative z-10">
-        {/* Brand Header */}
-        <div className="text-center space-y-3">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 text-white shadow-xl shadow-emerald-500/30 ring-4 ring-emerald-500/20">
-            <Dumbbell className="h-8 w-8" />
+        {/* Brand Header with Official Shiva Gym Logo */}
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <div className="relative w-40 sm:w-52 h-40 sm:h-52 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 bg-slate-900/90 p-2 ring-4 ring-emerald-500/20">
+            <img
+              src="/images/shiva-gym-logo.png"
+              alt="SHIVA GYM Official Logo"
+              className="w-full h-full object-contain rounded-2xl"
+            />
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight text-white">SHIVA GYM</h1>
-          <p className="text-sm font-bold text-emerald-400 uppercase tracking-widest">SHAPE YOUR BODY</p>
+          <p className="text-xs sm:text-sm font-bold text-emerald-400 uppercase tracking-widest">SHAPE YOUR BODY</p>
         </div>
 
         <Card className="border-slate-800 bg-slate-900/90 shadow-2xl backdrop-blur-xl">
