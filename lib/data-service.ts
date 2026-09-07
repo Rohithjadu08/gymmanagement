@@ -665,18 +665,24 @@ export async function getMembers(
 ): Promise<MemberWithDetails[]> {
   let membersList: Member[] = [];
   let paymentsList: Payment[] = [];
-  const settings = await getGymSettings();
+  let settings: GymSettings = mockSettings;
 
   if (isSupabaseConfigured()) {
     try {
       const supabase = createBrowserClient();
-      const { data: membersData } = await withTimeout(supabase.from('members').select('*').order('created_at', { ascending: false }));
-      const { data: paymentsData } = await withTimeout(supabase.from('payments').select('*, membership_plans(*)'));
-      if (membersData) membersList = membersData as Member[];
-      if (paymentsData) paymentsList = paymentsData as Payment[];
+      const [settingsData, membersRes, paymentsRes] = await Promise.all([
+        getGymSettings(),
+        withTimeout(supabase.from('members').select('*').order('created_at', { ascending: false })),
+        withTimeout(supabase.from('payments').select('*, membership_plans(*)')),
+      ]);
+      settings = settingsData;
+      if (membersRes.data) membersList = membersRes.data as Member[];
+      if (paymentsRes.data) paymentsList = paymentsRes.data as Payment[];
     } catch (e) {
       console.warn('Supabase fetch failed:', e);
     }
+  } else {
+    settings = await getGymSettings();
   }
 
   if (membersList.length === 0) {
@@ -868,8 +874,10 @@ export async function recordPayment(
 }
 
 export async function getDashboardMetrics(): Promise<DashboardMetrics> {
-  const members = await getMembers();
-  const payments = await getPayments();
+  const [members, payments] = await Promise.all([
+    getMembers(),
+    getPayments(),
+  ]);
 
   const totalMembers = members.length;
   const activeMembers = members.filter((m) => m.status === 'ACTIVE').length;

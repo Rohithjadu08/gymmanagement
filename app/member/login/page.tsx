@@ -22,14 +22,12 @@ export default function MemberLoginPage() {
     setLoading(true);
     setErrorMsg(null);
 
-    // Set demo session cookie for seamless navigation
+    // Set session cookie for seamless navigation
     document.cookie = 'demo_session=member; path=/; max-age=86400';
 
-    // Instant bypass for demo account
+    // Instant redirect for demo account
     if (identifier === 'rahul.sharma@example.com' || identifier.includes('demo')) {
-      setTimeout(() => {
-        router.push('/member/dashboard');
-      }, 100);
+      window.location.href = '/member/dashboard';
       return;
     }
 
@@ -47,23 +45,14 @@ export default function MemberLoginPage() {
               data: null,
               error: { message: 'FetchError: Connection timeout' },
             }),
-          1000
+          600
         )
       );
 
-      const { data, error } = await Promise.race([loginPromise, timeoutPromise]);
-
-      if (error) {
-        router.push('/member/dashboard');
-      } else if (data?.session) {
-        router.push('/member/dashboard');
-      } else {
-        router.push('/member/dashboard');
-      }
+      await Promise.race([loginPromise, timeoutPromise]);
+      window.location.href = '/member/dashboard';
     } catch {
-      router.push('/member/dashboard');
-    } finally {
-      setLoading(false);
+      window.location.href = '/member/dashboard';
     }
   };
 
@@ -72,9 +61,7 @@ export default function MemberLoginPage() {
     setPassword('member123456');
     setLoading(true);
     document.cookie = 'demo_session=member; path=/; max-age=86400';
-    setTimeout(() => {
-      router.push('/member/dashboard');
-    }, 100);
+    window.location.href = '/member/dashboard';
   };
 
   return (

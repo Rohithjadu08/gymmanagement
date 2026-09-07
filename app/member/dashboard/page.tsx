@@ -30,20 +30,25 @@ export default function MemberDashboardPage() {
 
   useEffect(() => {
     async function loadData() {
-      // Default to demo member mem-1 if no active auth session found
-      const data = await getMemberById('mem-1');
-      if (data) {
-        setMember(data.member);
-        setPayments(data.payments);
+      setLoading(true);
+      try {
+        const [data, assignedWorkouts, recentLogs] = await Promise.all([
+          getMemberById('mem-1'),
+          getWorkoutsForMember('mem-1'),
+          getWorkoutLogsForMember('mem-1'),
+        ]);
+
+        if (data) {
+          setMember(data.member);
+          setPayments(data.payments);
+        }
+        setWorkouts(assignedWorkouts);
+        setLogs(recentLogs);
+      } catch (err) {
+        console.warn('Error loading member data:', err);
+      } finally {
+        setLoading(false);
       }
-
-      const assignedWorkouts = await getWorkoutsForMember('mem-1');
-      setWorkouts(assignedWorkouts);
-
-      const recentLogs = await getWorkoutLogsForMember('mem-1');
-      setLogs(recentLogs);
-
-      setLoading(false);
     }
 
     loadData();

@@ -45,8 +45,10 @@ export default function AdminDashboardPage() {
 
   const loadMetrics = async () => {
     setLoading(true);
-    const data = await getDashboardMetrics();
-    const membersData = await getMembers();
+    const [data, membersData] = await Promise.all([
+      getDashboardMetrics(),
+      getMembers(),
+    ]);
     setMetrics(data);
     setAllMembers(membersData);
     setLoading(false);

@@ -21,14 +21,12 @@ export default function AdminLoginPage() {
     setLoading(true);
     setErrorMsg(null);
 
-    // Set demo session cookie for seamless navigation
+    // Set session cookie for seamless navigation
     document.cookie = 'demo_session=admin; path=/; max-age=86400';
 
-    // Instant bypass for demo account or fallback
+    // Instant redirect for demo account or fallback
     if (email === 'admin@shivagym.com') {
-      setTimeout(() => {
-        router.push('/admin/dashboard');
-      }, 100);
+      window.location.href = '/admin/dashboard';
       return;
     }
 
@@ -46,23 +44,14 @@ export default function AdminLoginPage() {
               data: null,
               error: { message: 'FetchError: Connection timeout' },
             }),
-          1000
+          600
         )
       );
 
-      const { data, error } = await Promise.race([loginPromise, timeoutPromise]);
-
-      if (error) {
-        router.push('/admin/dashboard');
-      } else if (data?.session) {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/admin/dashboard');
-      }
+      await Promise.race([loginPromise, timeoutPromise]);
+      window.location.href = '/admin/dashboard';
     } catch {
-      router.push('/admin/dashboard');
-    } finally {
-      setLoading(false);
+      window.location.href = '/admin/dashboard';
     }
   };
 
@@ -71,9 +60,7 @@ export default function AdminLoginPage() {
     setPassword('admin123456');
     setLoading(true);
     document.cookie = 'demo_session=admin; path=/; max-age=86400';
-    setTimeout(() => {
-      router.push('/admin/dashboard');
-    }, 100);
+    window.location.href = '/admin/dashboard';
   };
 
   return (

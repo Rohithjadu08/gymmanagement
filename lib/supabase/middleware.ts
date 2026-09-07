@@ -44,7 +44,7 @@ export async function updateSession(request: NextRequest) {
       // Fast timeout so middleware never hangs requests if Supabase URL is unreachable
       const getUserPromise = supabase.auth.getUser();
       const timeoutPromise = new Promise<{ data: { user: any } }>((resolve) =>
-        setTimeout(() => resolve({ data: { user: null } }), 1000)
+        setTimeout(() => resolve({ data: { user: null } }), 400)
       );
 
       const res = await Promise.race([getUserPromise, timeoutPromise]);
