@@ -41,12 +41,13 @@ export function AdminSidebar() {
 
   const handleLogout = async () => {
     try {
+      document.cookie = 'demo_session=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT;';
       const supabase = createClient();
       await supabase.auth.signOut();
     } catch (e) {
       console.warn('Sign out error:', e);
     }
-    router.push('/admin/login');
+    window.location.href = '/admin/login';
   };
 
   const NavContent = () => (
