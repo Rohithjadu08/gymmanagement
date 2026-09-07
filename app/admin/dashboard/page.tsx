@@ -14,19 +14,27 @@ import {
   ArrowUpRight,
   TrendingUp,
   MessageCircle,
+  Search,
+  ArrowRight,
+  User,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/shared/status-badge';
-import { DashboardMetrics } from '@/types/database.types';
-import { getDashboardMetrics } from '@/lib/data-service';
+import { DashboardMetrics, MemberWithDetails } from '@/types/database.types';
+import { getDashboardMetrics, getMembers } from '@/lib/data-service';
 import { formatCurrency, formatDate, generateWhatsAppReminderUrl } from '@/lib/utils';
 import { AddMemberModal } from '@/components/admin/add-member-modal';
 import { RecordPaymentModal } from '@/components/admin/record-payment-modal';
 
 export default function AdminDashboardPage() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
+  const [allMembers, setAllMembers] = useState<MemberWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [memberSearch, setMemberSearch] = useState('');
+  const [memberFilter, setMemberFilter] = useState<'ALL' | 'ACTIVE' | 'DUE_SOON' | 'OVERDUE'>('ALL');
 
   const [addMemberOpen, setAddMemberOpen] = useState(false);
   const [recordPaymentOpen, setRecordPaymentOpen] = useState(false);
@@ -38,7 +46,9 @@ export default function AdminDashboardPage() {
   const loadMetrics = async () => {
     setLoading(true);
     const data = await getDashboardMetrics();
+    const membersData = await getMembers();
     setMetrics(data);
+    setAllMembers(membersData);
     setLoading(false);
   };
 
@@ -52,6 +62,18 @@ export default function AdminDashboardPage() {
       </div>
     );
   }
+
+  const filteredMembers = allMembers.filter((m) => {
+    const matchesStatus = memberFilter === 'ALL' || m.status === memberFilter;
+    const query = memberSearch.trim().toLowerCase();
+    const matchesSearch =
+      !query ||
+      m.full_name.toLowerCase().includes(query) ||
+      (m.membership_number && m.membership_number.toLowerCase().includes(query)) ||
+      m.member_code.toLowerCase().includes(query) ||
+      m.phone.includes(query);
+    return matchesStatus && matchesSearch;
+  });
 
   return (
     <div className="space-y-8">
@@ -385,6 +407,144 @@ export default function AdminDashboardPage() {
           </Card>
         </div>
       </div>
+
+      {/* MEMBERS OVERVIEW SECTION */}
+      <Card className="border-slate-800 bg-slate-900/90 shadow-xl p-5 md:p-6 space-y-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-slate-800 pb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-emerald-400" />
+              <h2 className="text-xl font-extrabold text-white tracking-tight">Members Overview</h2>
+              <span className="rounded-full bg-emerald-950 border border-emerald-800 px-2.5 py-0.5 text-xs font-mono font-bold text-emerald-400">
+                {metrics.totalMembers} Total Members
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              Browse individual athlete profiles, photo cards, membership validity, and payment statuses.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            {/* Search Input */}
+            <div className="relative min-w-[220px]">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+              <Input
+                placeholder="Search name, number, phone..."
+                value={memberSearch}
+                onChange={(e) => setMemberSearch(e.target.value)}
+                className="pl-9 h-9 text-xs bg-slate-950 border-slate-800 focus:border-emerald-500"
+              />
+            </div>
+
+            {/* View All Members Button */}
+            <Link href="/admin/members">
+              <Button size="sm" variant="outline" className="w-full sm:w-auto h-9 text-xs font-semibold">
+                View All Members <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 mr-1">Filter Status:</span>
+          {[
+            { id: 'ALL', label: 'All Members' },
+            { id: 'ACTIVE', label: '🟢 Active' },
+            { id: 'DUE_SOON', label: '🟡 Due Soon' },
+            { id: 'OVERDUE', label: '🔴 Overdue' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setMemberFilter(tab.id as any)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                memberFilter === tab.id
+                  ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/20'
+                  : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white hover:border-slate-700'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Member Profile Cards Grid */}
+        {filteredMembers.length === 0 ? (
+          <div className="py-12 text-center text-slate-500 text-sm bg-slate-950/40 rounded-xl border border-dashed border-slate-800">
+            No member profiles match your current search or status filter state.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filteredMembers.map((member) => (
+              <Link
+                key={member.id}
+                href={`/admin/members/${member.id}`}
+                className="group relative flex flex-col justify-between rounded-2xl border border-slate-800 bg-slate-950/90 p-4 transition-all duration-200 hover:border-emerald-500/50 hover:bg-slate-900/90 hover:shadow-xl hover:shadow-emerald-950/20"
+              >
+                <div className="space-y-3">
+                  {/* Photo Container */}
+                  <div className="relative h-44 w-full rounded-xl bg-slate-900 border border-slate-800 overflow-hidden flex items-center justify-center group-hover:border-slate-700 transition-colors">
+                    {member.photo_url ? (
+                      <img
+                        src={member.photo_url}
+                        alt={member.full_name}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-slate-500 gap-1">
+                        <div className="h-16 w-16 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-extrabold text-2xl text-emerald-400 shadow-md">
+                          {member.full_name.charAt(0)}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="absolute top-2 right-2">
+                      <StatusBadge status={member.status} showIcon={false} className="text-[10px] px-2 py-0.5 shadow-md" />
+                    </div>
+                  </div>
+
+                  {/* Profile Details */}
+                  <div className="space-y-1">
+                    <h3 className="font-bold text-white text-base group-hover:text-emerald-400 transition-colors truncate">
+                      {member.full_name}
+                    </h3>
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs font-bold text-emerald-400 bg-emerald-950/80 border border-emerald-800/60 px-2 py-0.5 rounded">
+                        {member.membership_number || member.member_code}
+                      </span>
+                      <span className="text-xs text-slate-400 flex items-center gap-1 font-mono">
+                        📱 {member.phone}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Plan & Fee Breakdown */}
+                  <div className="pt-2 border-t border-slate-800/80 space-y-1 text-xs">
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span className="text-slate-400 font-medium">Plan:</span>
+                      <span className="font-semibold text-slate-100">{member.plan_name || 'Standard'}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span className="text-slate-400 font-medium">Fee Amount:</span>
+                      <span className="font-bold text-emerald-400">₹{member.plan_price || 0}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-slate-300">
+                      <span className="text-slate-400 font-medium">Expires:</span>
+                      <span className="font-semibold text-slate-200">{formatDate(member.expiry_date)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs text-emerald-400 font-semibold group-hover:translate-x-0.5 transition-transform">
+                  <span>View Member Profile</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </Card>
 
       {/* Quick Action Modals */}
       <AddMemberModal
