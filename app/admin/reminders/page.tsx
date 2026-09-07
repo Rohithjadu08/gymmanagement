@@ -134,51 +134,84 @@ function RemindersContent() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {members.map((m) => (
-                    <tr key={m.id} className="hover:bg-slate-800/30">
-                      <td className="py-3.5">
-                        <span className="font-bold text-white block">{m.full_name}</span>
-                        <span className="text-xs font-mono text-emerald-400 font-bold">{m.membership_number || m.member_code}</span>
-                      </td>
-                      <td className="py-3.5 text-slate-300 font-mono">{m.phone}</td>
-                      <td className="py-3.5 text-emerald-400 font-semibold">{m.plan_name || 'N/A'}</td>
-                      <td className="py-3.5 font-bold text-white">₹{m.plan_price || 0}</td>
-                      <td className="py-3.5 text-slate-200">{formatDate(m.expiry_date)}</td>
-                      <td className="py-3.5 font-bold">
-                        {m.days_remaining >= 0 ? (
-                          <span className="text-amber-400">{m.days_remaining} days left</span>
-                        ) : (
-                          <span className="text-rose-400">{Math.abs(m.days_remaining)} days overdue</span>
-                        )}
-                      </td>
-                      <td className="py-3.5">
-                        <StatusBadge status={m.status} showIcon={false} />
-                      </td>
-                      <td className="py-3.5 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button
-                            size="sm"
-                            variant="amber"
-                            onClick={() => handleOpenPayment(m.id)}
-                            className="h-8 text-xs"
-                          >
-                            <CreditCard className="mr-1 h-3.5 w-3.5" />
-                            Record Fee
-                          </Button>
+                  {members.map((m) => {
+                    const isOverdue = activeTab === 'OVERDUE';
+                    const { url: waUrl, isValidPhone, disabledReason } = generateWhatsAppReminderUrl({
+                      phone: m.phone,
+                      memberName: m.full_name,
+                      expiryDate: m.expiry_date || '',
+                      isOverdue,
+                      gymName,
+                    });
 
-                          <Button
-                            size="sm"
-                            variant="whatsapp"
-                            onClick={() => handleSendWhatsApp(m)}
-                            className="h-8 text-xs"
-                          >
-                            <MessageCircle className="mr-1 h-3.5 w-3.5" />
-                            WhatsApp
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                    return (
+                      <tr key={m.id} className="hover:bg-slate-800/30">
+                        <td className="py-3.5">
+                          <span className="font-bold text-white block">{m.full_name}</span>
+                          <span className="text-xs font-mono text-emerald-400 font-bold">{m.membership_number || m.member_code}</span>
+                        </td>
+                        <td className="py-3.5 text-slate-300 font-mono">
+                          {m.phone ? (
+                            <a href={`tel:${m.phone}`} className="hover:text-emerald-400 hover:underline">
+                              {m.phone}
+                            </a>
+                          ) : (
+                            <span className="text-slate-500 italic text-xs">Not available</span>
+                          )}
+                        </td>
+                        <td className="py-3.5 text-emerald-400 font-semibold">{m.plan_name || 'N/A'}</td>
+                        <td className="py-3.5 font-bold text-white">₹{m.plan_price || 0}</td>
+                        <td className="py-3.5 text-slate-200">{formatDate(m.expiry_date)}</td>
+                        <td className="py-3.5 font-bold">
+                          {m.days_remaining >= 0 ? (
+                            <span className="text-amber-400">{m.days_remaining} days left</span>
+                          ) : (
+                            <span className="text-rose-400">{Math.abs(m.days_remaining)} days overdue</span>
+                          )}
+                        </td>
+                        <td className="py-3.5">
+                          <StatusBadge status={m.status} showIcon={false} />
+                        </td>
+                        <td className="py-3.5 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button
+                              size="sm"
+                              variant="amber"
+                              onClick={() => handleOpenPayment(m.id)}
+                              className="h-8 text-xs"
+                            >
+                              <CreditCard className="mr-1 h-3.5 w-3.5" />
+                              Record Fee
+                            </Button>
+
+                            {isValidPhone ? (
+                              <a href={waUrl} target="_blank" rel="noopener noreferrer" title="💬 WhatsApp Reminder">
+                                <Button
+                                  size="sm"
+                                  variant="whatsapp"
+                                  className="h-8 text-xs"
+                                >
+                                  <MessageCircle className="mr-1 h-3.5 w-3.5" />
+                                  WhatsApp
+                                </Button>
+                              </a>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="whatsapp"
+                                disabled
+                                className="h-8 text-xs opacity-50 cursor-not-allowed"
+                                title={disabledReason || 'WhatsApp unavailable — phone number missing'}
+                              >
+                                <MessageCircle className="mr-1 h-3.5 w-3.5" />
+                                WhatsApp
+                              </Button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

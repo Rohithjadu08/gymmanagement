@@ -363,7 +363,7 @@ export default function AdminDashboardPage() {
                 </div>
               ) : (
                 metrics.overdueMembersList.map((m) => {
-                  const { url } = generateWhatsAppReminderUrl({
+                  const { url: waUrl, isValidPhone, disabledReason } = generateWhatsAppReminderUrl({
                     phone: m.phone,
                     memberName: m.full_name,
                     expiryDate: m.expiry_date || '',
@@ -384,12 +384,25 @@ export default function AdminDashboardPage() {
                           {Math.abs(m.days_remaining)} days overdue
                         </p>
                       </div>
-                      <a href={url} target="_blank" rel="noopener noreferrer">
-                        <Button size="sm" variant="whatsapp" className="h-8 text-xs px-2.5">
+                      {isValidPhone ? (
+                        <a href={waUrl} target="_blank" rel="noopener noreferrer" title="💬 WhatsApp Reminder">
+                          <Button size="sm" variant="whatsapp" className="h-8 text-xs px-2.5">
+                            <MessageCircle className="mr-1 h-3.5 w-3.5" />
+                            WhatsApp
+                          </Button>
+                        </a>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="whatsapp"
+                          disabled
+                          className="h-8 text-xs px-2.5 opacity-50 cursor-not-allowed"
+                          title={disabledReason || 'WhatsApp unavailable — phone number missing'}
+                        >
                           <MessageCircle className="mr-1 h-3.5 w-3.5" />
                           WhatsApp
                         </Button>
-                      </a>
+                      )}
                     </div>
                   );
                 })
@@ -514,7 +527,21 @@ export default function AdminDashboardPage() {
                         {member.membership_number || member.member_code}
                       </span>
                       <span className="text-xs text-slate-400 flex items-center gap-1 font-mono">
-                        📱 {member.phone}
+                        📱 {member.phone ? (
+                          <span
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              window.location.href = `tel:${member.phone}`;
+                            }}
+                            className="hover:text-emerald-400 hover:underline cursor-pointer"
+                            title="Call Member"
+                          >
+                            {member.phone}
+                          </span>
+                        ) : (
+                          'N/A'
+                        )}
                       </span>
                     </div>
                   </div>

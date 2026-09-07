@@ -71,7 +71,7 @@ export default function MemberProfilePage() {
 
   const { member, payments } = data;
 
-  const { url: waUrl } = generateWhatsAppReminderUrl({
+  const { url: waUrl, isValidPhone, disabledReason } = generateWhatsAppReminderUrl({
     phone: member.phone,
     memberName: member.full_name,
     expiryDate: member.expiry_date || '',
@@ -96,12 +96,19 @@ export default function MemberProfilePage() {
             Edit Profile
           </Button>
 
-          <a href={waUrl} target="_blank" rel="noopener noreferrer">
-            <Button variant="whatsapp">
+          {isValidPhone ? (
+            <a href={waUrl} target="_blank" rel="noopener noreferrer" title="💬 WhatsApp Reminder">
+              <Button variant="whatsapp">
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Send WhatsApp Notice
+              </Button>
+            </a>
+          ) : (
+            <Button variant="whatsapp" disabled className="opacity-50 cursor-not-allowed" title={disabledReason || 'WhatsApp unavailable — phone number missing'}>
               <MessageCircle className="mr-2 h-4 w-4" />
               Send WhatsApp Notice
             </Button>
-          </a>
+          )}
 
           <Button
             onClick={() => setRecordPaymentOpen(true)}
@@ -134,7 +141,14 @@ export default function MemberProfilePage() {
                 </span>
               </div>
               <p className="text-sm text-slate-400 flex items-center gap-2">
-                <Phone className="h-3.5 w-3.5 text-emerald-400" /> {member.phone}
+                <Phone className="h-3.5 w-3.5 text-emerald-400" />
+                {member.phone ? (
+                  <a href={`tel:${member.phone}`} className="hover:text-emerald-400 hover:underline font-mono">
+                    {member.phone}
+                  </a>
+                ) : (
+                  <span className="text-slate-500 italic">Not available</span>
+                )}
                 {member.email && (
                   <>
                     <span>•</span>
@@ -181,7 +195,13 @@ export default function MemberProfilePage() {
               </div>
               <div className="pt-3 flex justify-between">
                 <span className="text-slate-400">Phone Number:</span>
-                <span className="font-semibold text-white">{member.phone}</span>
+                {member.phone ? (
+                  <a href={`tel:${member.phone}`} className="font-semibold text-white hover:text-emerald-400 hover:underline font-mono">
+                    📱 {member.phone}
+                  </a>
+                ) : (
+                  <span className="text-slate-500 italic">Not available</span>
+                )}
               </div>
               <div className="pt-3 flex justify-between">
                 <span className="text-slate-400">Email:</span>

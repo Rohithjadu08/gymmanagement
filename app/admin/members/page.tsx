@@ -124,7 +124,7 @@ export default function MembersListPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {members.map((member) => {
-            const { url: waUrl } = generateWhatsAppReminderUrl({
+            const { url: waUrl, isValidPhone, disabledReason } = generateWhatsAppReminderUrl({
               phone: member.phone,
               memberName: member.full_name,
               expiryDate: member.expiry_date || '',
@@ -158,7 +158,13 @@ export default function MembersListPage() {
                       </Link>
                       <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-0.5">
                         <Phone className="h-3 w-3 text-emerald-400" />
-                        <span>{member.phone}</span>
+                        {member.phone ? (
+                          <a href={`tel:${member.phone}`} className="hover:text-emerald-400 hover:underline font-mono">
+                            {member.phone}
+                          </a>
+                        ) : (
+                          <span className="text-slate-500 italic">Not available</span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -215,12 +221,25 @@ export default function MembersListPage() {
                     </Button>
                   </div>
 
-                  <a href={waUrl} target="_blank" rel="noopener noreferrer">
-                    <Button size="sm" variant="whatsapp" className="px-2.5">
+                  {isValidPhone ? (
+                    <a href={waUrl} target="_blank" rel="noopener noreferrer" title="💬 WhatsApp Reminder">
+                      <Button size="sm" variant="whatsapp" className="px-2.5">
+                        <MessageCircle className="h-3.5 w-3.5 mr-1" />
+                        WhatsApp
+                      </Button>
+                    </a>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="whatsapp"
+                      disabled
+                      className="px-2.5 opacity-50 cursor-not-allowed"
+                      title={disabledReason || 'WhatsApp unavailable — phone number missing'}
+                    >
                       <MessageCircle className="h-3.5 w-3.5 mr-1" />
                       WhatsApp
                     </Button>
-                  </a>
+                  )}
                 </div>
               </Card>
             );
