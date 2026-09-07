@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
     document.cookie = 'demo_session=admin; path=/; max-age=86400';
 
     // Instant bypass for demo account or fallback
-    if (email === 'admin@ironpulsefitness.com') {
+    if (email === 'admin@shivagym.com') {
       setTimeout(() => {
         router.push('/admin/dashboard');
       }, 100);
@@ -67,7 +67,7 @@ export default function AdminLoginPage() {
   };
 
   const handleDemoLogin = () => {
-    setEmail('admin@ironpulsefitness.com');
+    setEmail('admin@shivagym.com');
     setPassword('admin123456');
     setLoading(true);
     document.cookie = 'demo_session=admin; path=/; max-age=86400';

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 -- 2. GYM SETTINGS
 CREATE TABLE IF NOT EXISTS public.gym_settings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  gym_name TEXT NOT NULL DEFAULT 'Iron Pulse Gym',
+  gym_name TEXT NOT NULL DEFAULT 'SHIVA GYM',
   phone TEXT DEFAULT '+91 98765 43210',
   whatsapp_number TEXT DEFAULT '919876543210',
   warning_days INT NOT NULL DEFAULT 7,

@@ -20,7 +20,7 @@ function RemindersContent() {
   );
   const [members, setMembers] = useState<MemberWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
-  const [gymName, setGymName] = useState('Iron Pulse Gym');
+  const [gymName, setGymName] = useState('Shiva Gym');
 
   const [recordPaymentOpen, setRecordPaymentOpen] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState('');
@@ -32,7 +32,7 @@ function RemindersContent() {
   const loadData = async () => {
     setLoading(true);
     const settings = await getGymSettings();
-    setGymName(settings.gym_name);
+    setGymName(settings?.gym_name || 'Shiva Gym');
 
     const allMembers = await getMembers(undefined, activeTab);
     setMembers(allMembers);
