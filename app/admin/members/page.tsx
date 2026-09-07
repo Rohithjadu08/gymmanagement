@@ -83,7 +83,7 @@ export default function MembersListPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
             <Input
-              placeholder="Search member name, code, phone..."
+              placeholder="Search membership number, name, phone..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10"
@@ -135,8 +135,8 @@ export default function MembersListPage() {
               <Card key={member.id} className="relative flex flex-col justify-between border-slate-800 bg-slate-900/90 hover:border-slate-700 transition-colors">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="rounded-lg bg-slate-800 px-2.5 py-1 text-xs font-bold text-slate-300">
-                      {member.member_code}
+                    <span className="rounded-lg bg-emerald-950/80 border border-emerald-800/60 px-2.5 py-1 text-xs font-mono font-bold text-emerald-400">
+                      {member.membership_number || member.member_code}
                     </span>
                     <StatusBadge status={member.status} daysRemaining={member.days_remaining} />
                   </div>

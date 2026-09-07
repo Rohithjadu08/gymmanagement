@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Member } from '@/types/database.types';
-import { updateMember } from '@/lib/data-service';
+import { updateMember, checkMembershipNumberExists } from '@/lib/data-service';
 import { Camera, Trash2, User, CheckCircle2 } from 'lucide-react';
 
 interface EditMemberModalProps {
@@ -27,8 +27,10 @@ export function EditMemberModal({ open, onOpenChange, member, onSuccess }: EditM
   const [loading, setLoading] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
+  const [membershipNumberError, setMembershipNumberError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
+    membership_number: '',
     full_name: '',
     phone: '',
     email: '',
@@ -44,7 +46,9 @@ export function EditMemberModal({ open, onOpenChange, member, onSuccess }: EditM
   useEffect(() => {
     if (member) {
       setPhotoPreview(member.photo_url || null);
+      setMembershipNumberError(null);
       setFormData({
+        membership_number: member.membership_number || member.member_code || '',
         full_name: member.full_name || '',
         phone: member.phone || '',
         email: member.email || '',
@@ -97,10 +101,25 @@ export function EditMemberModal({ open, onOpenChange, member, onSuccess }: EditM
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!member) return;
+    setMembershipNumberError(null);
+
+    const trimmedNumber = formData.membership_number.trim();
+    if (!trimmedNumber) {
+      setMembershipNumberError('Membership number is required');
+      return;
+    }
 
     setLoading(true);
     try {
+      const exists = await checkMembershipNumberExists(trimmedNumber, member.id);
+      if (exists) {
+        setMembershipNumberError('Membership number already exists. Please enter a different number.');
+        setLoading(false);
+        return;
+      }
+
       await updateMember(member.id, {
+        membership_number: trimmedNumber,
         full_name: formData.full_name,
         phone: formData.phone,
         email: formData.email || null,
@@ -177,14 +196,33 @@ export function EditMemberModal({ open, onOpenChange, member, onSuccess }: EditM
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="edit_full_name">Full Name *</Label>
-          <Input
-            id="edit_full_name"
-            value={formData.full_name}
-            onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-            required
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="edit_membership_number">Membership Number *</Label>
+            <Input
+              id="edit_membership_number"
+              value={formData.membership_number}
+              onChange={(e) => {
+                setFormData({ ...formData, membership_number: e.target.value });
+                if (membershipNumberError) setMembershipNumberError(null);
+              }}
+              className={membershipNumberError ? 'border-rose-500 focus:ring-rose-500' : ''}
+              required
+            />
+            {membershipNumberError && (
+              <p className="text-xs text-rose-400 font-semibold">{membershipNumberError}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit_full_name">Full Name *</Label>
+            <Input
+              id="edit_full_name"
+              value={formData.full_name}
+              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+              required
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

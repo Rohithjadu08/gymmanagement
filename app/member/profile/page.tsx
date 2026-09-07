@@ -92,7 +92,7 @@ export default function MemberProfilePage() {
           </div>
 
           <h2 className="text-xl font-bold text-white">{member?.full_name}</h2>
-          <p className="text-xs text-amber-400 font-bold mt-0.5">{member?.member_code} • SHIVA GYM</p>
+          <p className="text-xs text-amber-400 font-bold mt-0.5">{member?.membership_number || member?.member_code} • SHIVA GYM</p>
 
           <div className="mt-4 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
             {member?.status || 'ACTIVE'} MEMBER

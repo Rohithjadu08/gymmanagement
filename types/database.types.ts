@@ -36,6 +36,7 @@ export interface Member {
   id: string;
   user_id?: string | null;
   member_code: string;
+  membership_number: string;
   full_name: string;
   phone: string;
   email?: string | null;

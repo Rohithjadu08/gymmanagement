@@ -55,7 +55,7 @@ export default function MemberMembershipPage() {
                   {member?.plan_name || 'Standard Plan'}
                 </h2>
                 <p className="text-xs text-zinc-400 mt-0.5">
-                  Member ID: <span className="text-amber-400 font-mono">{member?.member_code}</span>
+                  Membership Number: <span className="text-amber-400 font-mono">{member?.membership_number || member?.member_code}</span>
                 </p>
               </div>
             </div>

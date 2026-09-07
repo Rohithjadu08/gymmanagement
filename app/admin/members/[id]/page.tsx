@@ -129,8 +129,8 @@ export default function MemberProfilePage() {
             <div className="space-y-1">
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-extrabold text-white">{member.full_name}</h1>
-                <span className="rounded-lg bg-slate-800 px-2.5 py-0.5 text-xs font-bold text-slate-300">
-                  {member.member_code}
+                <span className="rounded-lg bg-emerald-950 border border-emerald-800 px-3 py-1 text-xs font-mono font-bold text-emerald-400">
+                  Membership Number: {member.membership_number || member.member_code}
                 </span>
               </div>
               <p className="text-sm text-slate-400 flex items-center gap-2">
@@ -176,8 +176,8 @@ export default function MemberProfilePage() {
             </CardHeader>
             <CardContent className="space-y-4 text-sm divide-y divide-slate-800/60">
               <div className="pt-2 flex justify-between">
-                <span className="text-slate-400">Member ID:</span>
-                <span className="font-semibold text-white">{member.member_code}</span>
+                <span className="text-slate-400">Membership Number:</span>
+                <span className="font-bold font-mono text-emerald-400">{member.membership_number || member.member_code}</span>
               </div>
               <div className="pt-3 flex justify-between">
                 <span className="text-slate-400">Phone Number:</span>

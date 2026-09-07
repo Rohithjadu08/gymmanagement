@@ -301,7 +301,8 @@ export default function AdminDashboardPage() {
                       {metrics.recentPayments.map((p) => (
                         <tr key={p.id} className="hover:bg-slate-800/30">
                           <td className="py-3 font-semibold text-white">
-                            {p.members?.full_name || 'Member'}
+                            <div>{p.members?.full_name || 'Member'}</div>
+                            <div className="text-xs font-mono text-emerald-400 font-bold">{p.members?.membership_number || p.members?.member_code}</div>
                           </td>
                           <td className="py-3 text-slate-300">{p.membership_plans?.name || 'Plan'}</td>
                           <td className="py-3 font-bold text-emerald-400">{formatCurrency(p.amount)}</td>
@@ -353,7 +354,10 @@ export default function AdminDashboardPage() {
                       className="rounded-xl border border-slate-800 bg-slate-950 p-3 flex items-center justify-between gap-2"
                     >
                       <div>
-                        <h4 className="font-semibold text-white text-sm">{m.full_name}</h4>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-white text-sm">{m.full_name}</h4>
+                          <span className="text-[11px] font-mono text-emerald-400 font-bold bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800">{m.membership_number || m.member_code}</span>
+                        </div>
                         <p className="text-xs text-rose-400">
                           {Math.abs(m.days_remaining)} days overdue
                         </p>

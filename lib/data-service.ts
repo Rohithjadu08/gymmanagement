@@ -80,6 +80,7 @@ let mockMembers: Member[] = [
   {
     id: 'mem-1',
     member_code: 'SG-1001',
+    membership_number: 'SHIVA-00101',
     full_name: 'Rahul Sharma',
     phone: '9876543210',
     email: 'rahul.sharma@example.com',
@@ -94,6 +95,7 @@ let mockMembers: Member[] = [
   {
     id: 'mem-2',
     member_code: 'SG-1002',
+    membership_number: 'SHIVA-00102',
     full_name: 'Priya Patel',
     phone: '9812345678',
     email: 'priya.patel@example.com',
@@ -108,6 +110,7 @@ let mockMembers: Member[] = [
   {
     id: 'mem-3',
     member_code: 'SG-1003',
+    membership_number: 'SHIVA-00103',
     full_name: 'Vikram Singh',
     phone: '9988776655',
     email: 'vikram.singh@example.com',
@@ -122,6 +125,7 @@ let mockMembers: Member[] = [
   {
     id: 'mem-4',
     member_code: 'SG-1004',
+    membership_number: 'SHIVA-00104',
     full_name: 'Ananya Verma',
     phone: '9765432109',
     email: 'ananya.v@example.com',
@@ -691,6 +695,7 @@ export async function getMembers(
       (m) =>
         m.full_name.toLowerCase().includes(query) ||
         m.member_code.toLowerCase().includes(query) ||
+        (m.membership_number && m.membership_number.toLowerCase().includes(query)) ||
         m.phone.includes(query) ||
         (m.email && m.email.toLowerCase().includes(query))
     );
@@ -783,6 +788,21 @@ export async function toggleMemberActive(id: string, isActive: boolean): Promise
   return await updateMember(id, { is_active: isActive });
 }
 
+export async function checkMembershipNumberExists(
+  membershipNumber: string,
+  excludeMemberId?: string
+): Promise<boolean> {
+  const trimmed = membershipNumber.trim().toLowerCase();
+  if (!trimmed) return false;
+  const allMembers = await getMembers();
+  return allMembers.some(
+    (m) =>
+      m.membership_number &&
+      m.membership_number.trim().toLowerCase() === trimmed &&
+      (!excludeMemberId || m.id !== excludeMemberId)
+  );
+}
+
 export async function getPayments(searchQuery?: string): Promise<Payment[]> {
   let paymentsList: Payment[] = [];
 
@@ -813,6 +833,7 @@ export async function getPayments(searchQuery?: string): Promise<Payment[]> {
       (p) =>
         p.members?.full_name.toLowerCase().includes(q) ||
         p.members?.member_code.toLowerCase().includes(q) ||
+        (p.members?.membership_number && p.members.membership_number.toLowerCase().includes(q)) ||
         p.membership_plans?.name.toLowerCase().includes(q) ||
         p.payment_method.toLowerCase().includes(q)
     );

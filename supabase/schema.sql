@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS public.members (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID UNIQUE REFERENCES auth.users(id) ON DELETE SET NULL,
   member_code TEXT UNIQUE NOT NULL,
+  membership_number TEXT UNIQUE NOT NULL,
   full_name TEXT NOT NULL,
   phone TEXT NOT NULL,
   email TEXT,

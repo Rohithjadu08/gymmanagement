@@ -152,7 +152,7 @@ export default function AdminWorkoutsPage() {
             >
               {members.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.full_name} ({m.member_code})
+                  {m.membership_number || m.member_code} — {m.full_name}
                 </option>
               ))}
             </select>
@@ -160,6 +160,7 @@ export default function AdminWorkoutsPage() {
             {selectedMember && (
               <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 text-xs space-y-1">
                 <p className="text-slate-300 font-bold">{selectedMember.full_name}</p>
+                <p className="text-emerald-400 font-mono font-semibold">Membership No: {selectedMember.membership_number || selectedMember.member_code}</p>
                 <p className="text-slate-400">Phone: {selectedMember.phone}</p>
                 <p className="text-emerald-400 font-semibold">Status: {selectedMember.status}</p>
               </div>

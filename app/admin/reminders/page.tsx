@@ -138,7 +138,7 @@ function RemindersContent() {
                     <tr key={m.id} className="hover:bg-slate-800/30">
                       <td className="py-3.5">
                         <span className="font-bold text-white block">{m.full_name}</span>
-                        <span className="text-xs text-slate-400">{m.member_code}</span>
+                        <span className="text-xs font-mono text-emerald-400 font-bold">{m.membership_number || m.member_code}</span>
                       </td>
                       <td className="py-3.5 text-slate-300 font-mono">{m.phone}</td>
                       <td className="py-3.5 text-emerald-400 font-semibold">{m.plan_name || 'N/A'}</td>

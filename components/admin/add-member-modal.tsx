@@ -5,7 +5,7 @@ import { Dialog, DialogHeader, DialogTitle, DialogDescription, DialogFooter } fr
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createMember, getMembershipPlans, recordPayment } from '@/lib/data-service';
+import { createMember, getMembershipPlans, recordPayment, checkMembershipNumberExists } from '@/lib/data-service';
 import { MembershipPlan } from '@/types/database.types';
 import { SHIVA_GYM_CONFIG } from '@/lib/gym-config';
 import { Camera, Image as ImageIcon, Trash2, CheckCircle2, User } from 'lucide-react';
@@ -29,8 +29,10 @@ export function AddMemberModal({ open, onOpenChange, onSuccess }: AddMemberModal
   const [plans, setPlans] = useState<MembershipPlan[]>([]);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
+  const [membershipNumberError, setMembershipNumberError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
+    membership_number: '',
     full_name: '',
     phone: '',
     email: '',
@@ -123,15 +125,32 @@ export function AddMemberModal({ open, onOpenChange, onSuccess }: AddMemberModal
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMembershipNumberError(null);
+
+    const trimmedNumber = formData.membership_number.trim();
+    if (!trimmedNumber) {
+      setMembershipNumberError('Membership number is required');
+      return;
+    }
+
     setLoading(true);
 
     try {
+      // Validate uniqueness
+      const exists = await checkMembershipNumberExists(trimmedNumber);
+      if (exists) {
+        setMembershipNumberError('Membership number already exists. Please enter a different number.');
+        setLoading(false);
+        return;
+      }
+
       const codeNumber = Math.floor(1000 + Math.random() * 9000);
       const memberCode = `SG-${codeNumber}`;
 
       // 1. Create Member
       const createdMember = await createMember({
         member_code: memberCode,
+        membership_number: trimmedNumber,
         full_name: formData.full_name,
         phone: formData.phone,
         email: formData.email || null,
@@ -162,6 +181,7 @@ export function AddMemberModal({ open, onOpenChange, onSuccess }: AddMemberModal
 
       // Reset
       setFormData({
+        membership_number: '',
         full_name: '',
         phone: '',
         email: '',
@@ -173,6 +193,7 @@ export function AddMemberModal({ open, onOpenChange, onSuccess }: AddMemberModal
         notes: '',
       });
       setPhotoPreview(null);
+      setMembershipNumberError(null);
       onSuccess();
       onOpenChange(false);
     } catch (e) {
@@ -237,15 +258,35 @@ export function AddMemberModal({ open, onOpenChange, onSuccess }: AddMemberModal
         <div className="space-y-4">
           <h3 className="text-xs uppercase tracking-wider text-emerald-400 font-bold">Personal Information</h3>
           
-          <div className="space-y-2">
-            <Label htmlFor="full_name">Full Name *</Label>
-            <Input
-              id="full_name"
-              placeholder="e.g. Rahul Sharma"
-              value={formData.full_name}
-              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-              required
-            />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="membership_number">Membership Number *</Label>
+              <Input
+                id="membership_number"
+                placeholder="e.g. SHIVA-00125"
+                value={formData.membership_number}
+                onChange={(e) => {
+                  setFormData({ ...formData, membership_number: e.target.value });
+                  if (membershipNumberError) setMembershipNumberError(null);
+                }}
+                className={membershipNumberError ? 'border-rose-500 focus:ring-rose-500' : ''}
+                required
+              />
+              {membershipNumberError && (
+                <p className="text-xs text-rose-400 font-semibold">{membershipNumberError}</p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="full_name">Full Name *</Label>
+              <Input
+                id="full_name"
+                placeholder="e.g. Rahul Sharma"
+                value={formData.full_name}
+                onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                required
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

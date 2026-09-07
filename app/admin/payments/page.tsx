@@ -108,8 +108,11 @@ export default function PaymentsPage() {
                         <span className="font-semibold text-white block">
                           {p.members?.full_name || 'Member'}
                         </span>
-                        <span className="text-xs text-slate-400">
-                          {p.members?.member_code} • {p.members?.phone}
+                        <span className="text-xs font-mono text-emerald-400 font-bold">
+                          {p.members?.membership_number || p.members?.member_code}
+                        </span>
+                        <span className="text-xs text-slate-400 block">
+                          {p.members?.phone}
                         </span>
                       </td>
                       <td className="py-3.5 font-medium text-emerald-400">

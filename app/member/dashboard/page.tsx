@@ -109,7 +109,7 @@ export default function MemberDashboardPage() {
                 </h1>
               </div>
               <p className="text-sm font-semibold text-zinc-300 mt-0.5">
-                Athlete: {member?.full_name || 'Member'} • ID: {member?.member_code}
+                Athlete: {member?.full_name || 'Member'} • Membership No: <span className="text-amber-400 font-mono">{member?.membership_number || member?.member_code}</span>
               </p>
               <p className="text-xs text-zinc-400 mt-0.5">
                 Member since {member?.joining_date}

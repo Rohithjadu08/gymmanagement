@@ -158,7 +158,7 @@ export function RecordPaymentModal({
             <option value="">-- Choose Member --</option>
             {members.map((m) => (
               <option key={m.id} value={m.id}>
-                {m.full_name} ({m.member_code}) - {m.phone}
+                {m.membership_number || m.member_code} — {m.full_name} ({m.phone})
               </option>
             ))}
           </select>
