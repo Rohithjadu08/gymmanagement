@@ -1,18 +1,37 @@
 {
   "name": "Shiva Gym",
   "short_name": "Shiva Gym",
-  "description": "Shiva Gym Management and Fitness App",
+  "description": "Shiva Gym Management System and Fitness Portal",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#020617",
   "orientation": "portrait",
+  "categories": ["fitness", "management", "health"],
   "icons": [
     {
-      "src": "/images/shiva-gym-logo.png",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/images/shiva-gym-logo.png",

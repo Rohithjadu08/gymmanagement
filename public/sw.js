@@ -4,6 +4,8 @@ const STATIC_ASSETS = [
   '/manifest.json',
   '/images/shiva-gym-logo.png',
   '/images/shiva-gym-logo.jpg',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
   '/favicon.ico'
 ];
 
