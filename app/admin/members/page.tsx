@@ -90,15 +90,15 @@ export default function MembersListPage() {
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 p-1">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs font-semibold">
             {['ALL', 'ACTIVE', 'DUE_SOON', 'OVERDUE'].map((status) => (
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                className={`shrink-0 rounded-lg px-3 py-2 text-xs font-bold transition-all ${
                   statusFilter === status
-                    ? 'bg-emerald-600 text-white font-bold'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/20'
+                    : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white hover:border-slate-700'
                 }`}
               >
                 {status === 'ALL' ? 'All Members' : status.replace('_', ' ')}

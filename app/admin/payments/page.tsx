@@ -88,52 +88,102 @@ export default function PaymentsPage() {
               No payments match your search criteria.
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b border-slate-800 text-xs font-semibold uppercase text-slate-400">
-                    <th className="pb-3">Member</th>
-                    <th className="pb-3">Plan</th>
-                    <th className="pb-3">Amount</th>
-                    <th className="pb-3">Payment Date</th>
-                    <th className="pb-3">Validity Period</th>
-                    <th className="pb-3">Method</th>
-                    <th className="pb-3">Notes</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60">
-                  {payments.map((p) => (
-                    <tr key={p.id} className="hover:bg-slate-800/30">
-                      <td className="py-3.5">
-                        <span className="font-semibold text-white block">
-                          {p.members?.full_name || 'Member'}
-                        </span>
-                        <span className="text-xs font-mono text-emerald-400 font-bold">
-                          {p.members?.membership_number || p.members?.member_code}
-                        </span>
-                        <span className="text-xs text-slate-400 block">
-                          {p.members?.phone}
-                        </span>
-                      </td>
-                      <td className="py-3.5 font-medium text-emerald-400">
-                        {p.membership_plans?.name || 'Plan'}
-                      </td>
-                      <td className="py-3.5 font-bold text-white">{formatCurrency(p.amount)}</td>
-                      <td className="py-3.5 text-slate-300">{formatDate(p.payment_date)}</td>
-                      <td className="py-3.5 text-xs text-slate-300">
-                        {formatDate(p.start_date)} → <span className="font-semibold text-white">{formatDate(p.expiry_date)}</span>
-                      </td>
-                      <td className="py-3.5">
-                        <span className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+            <>
+              {/* Mobile Receipt Cards (< md) */}
+              <div className="block md:hidden space-y-3">
+                {payments.map((p) => (
+                  <div key={p.id} className="rounded-xl border border-slate-800 bg-slate-950 p-4 space-y-2.5 shadow-md">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-bold text-white text-base">{p.members?.full_name || 'Member'}</h4>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <span className="text-xs font-mono text-emerald-400 font-bold bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/80">
+                            {p.members?.membership_number || p.members?.member_code}
+                          </span>
+                          <span className="text-xs text-slate-400 font-mono">📱 {p.members?.phone}</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-extrabold text-emerald-400">{formatCurrency(p.amount)}</div>
+                        <span className="rounded bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-300">
                           {p.payment_method}
                         </span>
-                      </td>
-                      <td className="py-3.5 text-xs text-slate-400">{p.notes || '-'}</td>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-800/60 grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span className="text-slate-400 block">Plan Name:</span>
+                        <span className="font-semibold text-slate-200">{p.membership_plans?.name || 'Standard'}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block">Payment Date:</span>
+                        <span className="font-semibold text-slate-200">{formatDate(p.payment_date)}</span>
+                      </div>
+                      <div className="col-span-2 pt-1">
+                        <span className="text-slate-400 block">Validity Period:</span>
+                        <span className="font-semibold text-emerald-300">
+                          {formatDate(p.start_date)} → {formatDate(p.expiry_date)}
+                        </span>
+                      </div>
+                      {p.notes && (
+                        <div className="col-span-2 text-[11px] text-slate-400 italic bg-slate-900/60 p-2 rounded border border-slate-800/60">
+                          Note: {p.notes}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Ledger Table (>= md) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-xs font-semibold uppercase text-slate-400">
+                      <th className="pb-3">Member</th>
+                      <th className="pb-3">Plan</th>
+                      <th className="pb-3">Amount</th>
+                      <th className="pb-3">Payment Date</th>
+                      <th className="pb-3">Validity Period</th>
+                      <th className="pb-3">Method</th>
+                      <th className="pb-3">Notes</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {payments.map((p) => (
+                      <tr key={p.id} className="hover:bg-slate-800/30">
+                        <td className="py-3.5">
+                          <span className="font-semibold text-white block">
+                            {p.members?.full_name || 'Member'}
+                          </span>
+                          <span className="text-xs font-mono text-emerald-400 font-bold">
+                            {p.members?.membership_number || p.members?.member_code}
+                          </span>
+                          <span className="text-xs text-slate-400 block">
+                            {p.members?.phone}
+                          </span>
+                        </td>
+                        <td className="py-3.5 font-medium text-emerald-400">
+                          {p.membership_plans?.name || 'Plan'}
+                        </td>
+                        <td className="py-3.5 font-bold text-white">{formatCurrency(p.amount)}</td>
+                        <td className="py-3.5 text-slate-300">{formatDate(p.payment_date)}</td>
+                        <td className="py-3.5 text-xs text-slate-300">
+                          {formatDate(p.start_date)} → <span className="font-semibold text-white">{formatDate(p.expiry_date)}</span>
+                        </td>
+                        <td className="py-3.5">
+                          <span className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+                            {p.payment_method}
+                          </span>
+                        </td>
+                        <td className="py-3.5 text-xs text-slate-400">{p.notes || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

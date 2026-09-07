@@ -78,26 +78,27 @@ export default function AdminDashboardPage() {
   });
 
   return (
-    <div className="space-y-8">
-      {/* Top Header & Quick Actions */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="space-y-6 md:space-y-8 max-w-full overflow-hidden">
+      {/* Mobile & Desktop Header Greeting */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           <img
             src="/images/shiva-gym-logo.png"
             alt="SHIVA GYM Logo"
-            className="w-12 h-12 rounded-xl border border-slate-800 object-contain bg-slate-900 p-0.5 shadow-md shrink-0"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl border border-slate-800 object-contain bg-slate-900 p-0.5 shadow-md shrink-0"
           />
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex flex-wrap items-center gap-2">
-              SHIVA GYM <span className="text-emerald-400 text-xs font-semibold tracking-wider border border-emerald-800 bg-emerald-950/60 px-2.5 py-0.5 rounded-full uppercase">SHAPE YOUR BODY</span>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight text-white flex flex-wrap items-center gap-2">
+              SHIVA GYM <span className="text-emerald-400 text-[10px] sm:text-xs font-semibold tracking-wider border border-emerald-800 bg-emerald-950/60 px-2 py-0.5 rounded-full uppercase">SHAPE YOUR BODY</span>
             </h1>
-            <p className="text-xs sm:text-sm text-slate-400">
-              Real-time member status tracking, fee collections, and overdue alerts for SHIVA GYM.
+            <p className="text-xs text-slate-400">
+              Real-time member status tracking, fee collections, and overdue alerts.
             </p>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Desktop Quick Action Header Buttons */}
+        <div className="hidden md:flex items-center gap-3">
           <Button
             onClick={() => setAddMemberOpen(true)}
             className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20"
@@ -119,6 +120,39 @@ export default function AdminDashboardPage() {
             <Button variant="outline">
               <BellRing className="mr-2 h-4 w-4 text-emerald-400" />
               Fee Reminders
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Mobile Quick Action Section (< md) */}
+      <div className="block md:hidden space-y-2">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 px-0.5">Quick Actions</h2>
+        <div className="grid grid-cols-2 gap-2.5">
+          <Button
+            onClick={() => setAddMemberOpen(true)}
+            className="w-full h-12 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 rounded-xl"
+          >
+            <UserPlus className="h-4 w-4" />
+            <span>+ Add Member</span>
+          </Button>
+
+          <Button
+            onClick={() => setRecordPaymentOpen(true)}
+            variant="amber"
+            className="w-full h-12 font-bold text-xs shadow-lg shadow-amber-600/20 flex items-center justify-center gap-2 rounded-xl"
+          >
+            <CreditCard className="h-4 w-4" />
+            <span>₹ Record Payment</span>
+          </Button>
+
+          <Link href="/admin/reminders" className="col-span-2">
+            <Button
+              variant="outline"
+              className="w-full h-11 border-slate-800 bg-slate-900/90 text-slate-200 text-xs font-bold flex items-center justify-center gap-2 rounded-xl"
+            >
+              <BellRing className="h-4 w-4 text-emerald-400" />
+              <span>🔔 Send Fee Reminders</span>
             </Button>
           </Link>
         </div>
@@ -195,99 +229,102 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {/* KPI Cards (6 Core Metrics) */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
-        {/* Total Members */}
-        <Card className="relative overflow-hidden border-slate-800 bg-slate-900/80">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Members</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 text-slate-300">
-              <Users className="h-5 w-5" />
+      {/* KPI Cards (1 Card Per Row on Mobile, 2 on Tablet, 3 on Desktop) */}
+      <div className="space-y-2">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400 px-0.5">Key Performance Indicators</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
+          {/* Total Members */}
+          <Card className="relative overflow-hidden border-slate-800 bg-slate-900/90 p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Members</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-800 text-slate-300">
+                <Users className="h-5 w-5" />
+              </div>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-white">{metrics.totalMembers}</span>
-            <Link href="/admin/members" className="text-xs font-semibold text-emerald-400 hover:underline">
-              View directory →
-            </Link>
-          </div>
-        </Card>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-2xl sm:text-3xl font-extrabold text-white">{metrics.totalMembers}</span>
+              <Link href="/admin/members" className="text-xs font-semibold text-emerald-400 hover:underline">
+                View directory →
+              </Link>
+            </div>
+          </Card>
 
-        {/* Active Members */}
-        <Card className="relative overflow-hidden border-emerald-900/50 bg-emerald-950/20">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Active Members</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-900/40 text-emerald-400">
-              <UserCheck className="h-5 w-5" />
+          {/* Active Members */}
+          <Card className="relative overflow-hidden border-emerald-900/50 bg-emerald-950/30 p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">Active Members</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-900/40 text-emerald-400">
+                <UserCheck className="h-5 w-5" />
+              </div>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-emerald-300">{metrics.activeMembers}</span>
-            <span className="text-xs text-emerald-400/80 font-medium">Valid Memberships</span>
-          </div>
-        </Card>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-2xl sm:text-3xl font-extrabold text-emerald-300">{metrics.activeMembers}</span>
+              <span className="text-xs text-emerald-400/80 font-medium">Valid Memberships</span>
+            </div>
+          </Card>
 
-        {/* Due Soon Members */}
-        <Card className="relative overflow-hidden border-amber-900/50 bg-amber-950/20">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Due Soon</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-900/40 text-amber-400">
-              <Clock className="h-5 w-5" />
+          {/* Due Soon Members */}
+          <Card className="relative overflow-hidden border-amber-900/50 bg-amber-950/30 p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-400">Due Soon</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-900/40 text-amber-400">
+                <Clock className="h-5 w-5" />
+              </div>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-amber-300">{metrics.dueSoonMembers}</span>
-            <Link href="/admin/reminders?tab=DUE_SOON" className="text-xs font-semibold text-amber-400 hover:underline">
-              Review list →
-            </Link>
-          </div>
-        </Card>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-2xl sm:text-3xl font-extrabold text-amber-300">{metrics.dueSoonMembers}</span>
+              <Link href="/admin/reminders?tab=DUE_SOON" className="text-xs font-semibold text-amber-400 hover:underline">
+                Review list →
+              </Link>
+            </div>
+          </Card>
 
-        {/* Overdue Members */}
-        <Card className="relative overflow-hidden border-rose-900/50 bg-rose-950/20">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-rose-400">Overdue Members</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-900/40 text-rose-400">
-              <AlertOctagon className="h-5 w-5" />
+          {/* Overdue Members */}
+          <Card className="relative overflow-hidden border-rose-900/50 bg-rose-950/30 p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-rose-400">Overdue Members</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-900/40 text-rose-400">
+                <AlertOctagon className="h-5 w-5" />
+              </div>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-rose-300">{metrics.overdueMembers}</span>
-            <Link href="/admin/reminders?tab=OVERDUE" className="text-xs font-semibold text-rose-400 hover:underline">
-              Send Reminders →
-            </Link>
-          </div>
-        </Card>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-2xl sm:text-3xl font-extrabold text-rose-300">{metrics.overdueMembers}</span>
+              <Link href="/admin/reminders?tab=OVERDUE" className="text-xs font-semibold text-rose-400 hover:underline">
+                Send Reminders →
+              </Link>
+            </div>
+          </Card>
 
-        {/* Today's Collection */}
-        <Card className="relative overflow-hidden border-slate-800 bg-slate-900/80">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Today's Collection</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-950 text-emerald-400">
-              <IndianRupee className="h-5 w-5" />
+          {/* Today's Collection */}
+          <Card className="relative overflow-hidden border-slate-800 bg-slate-900/90 p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Today's Collection</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/60">
+                <IndianRupee className="h-5 w-5" />
+              </div>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-white">{formatCurrency(metrics.todayCollection)}</span>
-            <span className="text-xs text-slate-400">Today's Receipts</span>
-          </div>
-        </Card>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-2xl sm:text-3xl font-extrabold text-white">{formatCurrency(metrics.todayCollection)}</span>
+              <span className="text-xs text-slate-400">Today's Receipts</span>
+            </div>
+          </Card>
 
-        {/* Current Month Collection */}
-        <Card className="relative overflow-hidden border-slate-800 bg-slate-900/80">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Current Month Collection</span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white">
-              <TrendingUp className="h-5 w-5" />
+          {/* Current Month Collection */}
+          <Card className="relative overflow-hidden border-slate-800 bg-slate-900/90 p-4 sm:p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Current Month Collection</span>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white shadow-md">
+                <TrendingUp className="h-5 w-5" />
+              </div>
             </div>
-          </div>
-          <div className="mt-4 flex items-baseline justify-between">
-            <span className="text-3xl font-extrabold text-emerald-400">{formatCurrency(metrics.currentMonthCollection)}</span>
-            <Link href="/admin/reports" className="text-xs font-semibold text-emerald-400 hover:underline">
-              View reports →
-            </Link>
-          </div>
-        </Card>
+            <div className="mt-3 flex items-baseline justify-between">
+              <span className="text-2xl sm:text-3xl font-extrabold text-emerald-400">{formatCurrency(metrics.currentMonthCollection)}</span>
+              <Link href="/admin/reports" className="text-xs font-semibold text-emerald-400 hover:underline">
+                View reports →
+              </Link>
+            </div>
+          </Card>
+        </div>
       </div>
 
       {/* Main Content Grid: Recent Payments & Overdue Members */}
@@ -310,37 +347,66 @@ export default function AdminDashboardPage() {
               {metrics.recentPayments.length === 0 ? (
                 <p className="text-center py-6 text-sm text-slate-500">No payment records found.</p>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm">
-                    <thead>
-                      <tr className="border-b border-slate-800 text-xs font-semibold uppercase text-slate-400">
-                        <th className="pb-3">Member</th>
-                        <th className="pb-3">Plan</th>
-                        <th className="pb-3">Amount</th>
-                        <th className="pb-3">Method</th>
-                        <th className="pb-3">Expiry Date</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800/60">
-                      {metrics.recentPayments.map((p) => (
-                        <tr key={p.id} className="hover:bg-slate-800/30">
-                          <td className="py-3 font-semibold text-white">
-                            <div>{p.members?.full_name || 'Member'}</div>
-                            <div className="text-xs font-mono text-emerald-400 font-bold">{p.members?.membership_number || p.members?.member_code}</div>
-                          </td>
-                          <td className="py-3 text-slate-300">{p.membership_plans?.name || 'Plan'}</td>
-                          <td className="py-3 font-bold text-emerald-400">{formatCurrency(p.amount)}</td>
-                          <td className="py-3">
-                            <span className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+                <>
+                  {/* Mobile Receipt Cards (< md) */}
+                  <div className="block md:hidden space-y-3">
+                    {metrics.recentPayments.map((p) => (
+                      <div key={p.id} className="rounded-xl border border-slate-800 bg-slate-950 p-3.5 space-y-2">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h4 className="font-bold text-white text-sm">{p.members?.full_name || 'Member'}</h4>
+                            <span className="text-[11px] font-mono text-emerald-400 font-bold bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-800/80">
+                              {p.members?.membership_number || p.members?.member_code}
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-base font-extrabold text-emerald-400">{formatCurrency(p.amount)}</div>
+                            <span className="rounded bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-300">
                               {p.payment_method}
                             </span>
-                          </td>
-                          <td className="py-3 text-slate-400">{formatDate(p.expiry_date)}</td>
+                          </div>
+                        </div>
+                        <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
+                          <span>Plan: <strong className="text-slate-200">{p.membership_plans?.name || 'Standard'}</strong></span>
+                          <span>Expires: <strong className="text-slate-200">{formatDate(p.expiry_date)}</strong></span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Desktop Payments Table (>= md) */}
+                  <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                      <thead>
+                        <tr className="border-b border-slate-800 text-xs font-semibold uppercase text-slate-400">
+                          <th className="pb-3">Member</th>
+                          <th className="pb-3">Plan</th>
+                          <th className="pb-3">Amount</th>
+                          <th className="pb-3">Method</th>
+                          <th className="pb-3">Expiry Date</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody className="divide-y divide-slate-800/60">
+                        {metrics.recentPayments.map((p) => (
+                          <tr key={p.id} className="hover:bg-slate-800/30">
+                            <td className="py-3 font-semibold text-white">
+                              <div>{p.members?.full_name || 'Member'}</div>
+                              <div className="text-xs font-mono text-emerald-400 font-bold">{p.members?.membership_number || p.members?.member_code}</div>
+                            </td>
+                            <td className="py-3 text-slate-300">{p.membership_plans?.name || 'Plan'}</td>
+                            <td className="py-3 font-bold text-emerald-400">{formatCurrency(p.amount)}</td>
+                            <td className="py-3">
+                              <span className="rounded bg-slate-800 px-2 py-0.5 text-xs text-slate-300">
+                                {p.payment_method}
+                              </span>
+                            </td>
+                            <td className="py-3 text-slate-400">{formatDate(p.expiry_date)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
               )}
             </CardContent>
           </Card>
@@ -460,27 +526,29 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 mr-1">Filter Status:</span>
-          {[
-            { id: 'ALL', label: 'All Members' },
-            { id: 'ACTIVE', label: '🟢 Active' },
-            { id: 'DUE_SOON', label: '🟡 Due Soon' },
-            { id: 'OVERDUE', label: '🔴 Overdue' },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setMemberFilter(tab.id as any)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                memberFilter === tab.id
-                  ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/20'
-                  : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white hover:border-slate-700'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        {/* Filter Pills (Horizontally Scrollable Container on Mobile) */}
+        <div className="space-y-1">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Filter Status</span>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+            {[
+              { id: 'ALL', label: 'All Members' },
+              { id: 'ACTIVE', label: '🟢 Active' },
+              { id: 'DUE_SOON', label: '🟡 Due Soon' },
+              { id: 'OVERDUE', label: '🔴 Overdue' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setMemberFilter(tab.id as any)}
+                className={`shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-all ${
+                  memberFilter === tab.id
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
+                    : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white hover:border-slate-700'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Member Profile Cards Grid */}
