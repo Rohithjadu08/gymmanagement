@@ -194,7 +194,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* KPI Cards (6 Core Metrics) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
         {/* Total Members */}
         <Card className="relative overflow-hidden border-slate-800 bg-slate-900/80">
           <div className="flex items-center justify-between">
